@@ -1,6 +1,7 @@
 +++
 title="Introduction to Docker"
 date=2021-09-29
+description = "Learning Docker through an example"
 
 [taxonomies]
 categories = ["Docker"]

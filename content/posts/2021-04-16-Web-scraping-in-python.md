@@ -1,6 +1,7 @@
 +++
 title="Web scraping in Python"
 date=2021-04-16
+description = "Learning webscraping through an example"
 
 [taxonomies]
 categories = ["Python"]

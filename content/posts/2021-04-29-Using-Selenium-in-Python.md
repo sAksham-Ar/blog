@@ -1,6 +1,7 @@
 +++
 title="Using Selenium in Python"
 date=2021-04-29
+description="Learning Selenium through an example"
 
 [taxonomies]
 categories = ["Python"]
