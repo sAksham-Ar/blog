@@ -1,0 +1,5 @@
+{"rule":"I_LOWERCASE","sentence":"^\\Q+++ title=\"Deploying Microservices on Kubernetes\" date=2022-03-24 description = \"This blog describes how i deployed microservices on Kubernetes for the OpenSoft event.\"\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qtaxonomies categories = \"Kubernetes\"\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\Qextra toc = true comments = true +++\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QNote: without subPath the pod does not start.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QCreating a secret to pull images from ghcr,\\E$"}
