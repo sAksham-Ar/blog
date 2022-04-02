@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/folio/galleria.folio.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css' rel='stylesheet' />
+  <link href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" rel="stylesheet" />
+  <link href="https://sakshamar.in/deep-thought.css" rel="stylesheet" />
+
+  <title>
+    
+ | Web scraping in Python
+
+  </title>
+
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/mathtex-script-type.min.js" integrity="sha384-LJ2FmexL77rmGm6SIpxq7y+XA6bkLzGZEgCywzKOZG/ws4va9fUVu2neMjvc3zdv" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous" onload="renderMathInElement(document.body, {
+				delimiters: [
+					{left: '$$', right: '$$', display: true},
+					{left: '$', right: '$', display: false},
+					{left: '\\(', right: '\\)', display: false},
+					{left: '\\[', right: '\\]', display: true}
+				]
+			});"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item is-size-5 has-text-weight-bold" href="https:&#x2F;&#x2F;sakshamar.in"></a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;tags">
+            Tags
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;categories">
+            Categories
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            Web scraping in Python
+          </h1>
+          <p class="subtitle">Learning webscraping through an example</p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>sAksham-Ar published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2021-04-16">April 16, 2021</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>3 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>510 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://sakshamar.in/categories/python/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>Python</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <p>Today we are going to learn how to scrape a website in python. We will be scraping google to find results and store them as JSON.</p>
+<h2 id="requirements">Requirements</h2>
+<p>For web scraping we would require two libraries: </p>
+<ol>
+<li>requests</li>
+<li>bs4</li>
+</ol>
+<p>Just install them with pip as:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">pip3</span><span> install requests bs4</span><span>
+</span></code></pre>
+<h2 id="starting">Starting</h2>
+<p>first we would need to import the required libraries:</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span style="color:#b48ead;">import </span><span>requests</span><span>
+</span><span style="color:#b48ead;">from </span><span>bs4 </span><span style="color:#b48ead;">import </span><span>BeautifulSoup</span><span>
+</span><span style="color:#b48ead;">import </span><span>json</span><span>
+</span></code></pre>
+<p>Suppose we search &quot;foo bar&quot; in google the URL looks like this:</p>
+<p>https://www.google.com/search?q=foo+bar </p>
+<p>This means that if we want to search a custom search query we just replace all the spaces with + and add it to the end of https://www.google.com/search?q=.</p>
+<p>In python this would look like:</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span>BaseUrl=&quot;</span><span style="color:#a3be8c;">https://www.google.com/search?q=</span><span>&quot;</span><span>
+</span><span>SearchTerm=&quot;</span><span style="color:#a3be8c;">foo+bar</span><span>&quot;</span><span>
+</span><span>Url=BaseUrl+SearchTerm</span><span>
+</span></code></pre>
+<p>We will use requests to get HTML from this link which looks like:</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span>r=requests.</span><span style="color:#bf616a;">get</span><span>(Url)</span><span>
+</span></code></pre>
+<p><code>r.content</code> will contain the HTML code.</p>
+<h2 id="searching-html-through-beautifulsoup">Searching HTML through BeautifulSoup</h2>
+<p>We first need to find out which class a single search result belong to, which we can do by clicking inspect element on a result.</p>
+<p><img src="/assets/web-scraping-in-python-1.png" alt="output" /></p>
+<p>from this photo we can see that the title of the search is in a &quot;h3&quot;.So we just need to find all the &quot;h3&quot;  elements. Using BeautifulSoup we can do that as:</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span>soup=</span><span style="color:#bf616a;">BeautifulSoup</span><span>(r.content,&quot;</span><span style="color:#a3be8c;">html.parser</span><span>&quot;)</span><span>
+</span><span>titles=soup.</span><span style="color:#bf616a;">find_all</span><span>(&quot;</span><span style="color:#a3be8c;">h3</span><span>&quot;)</span><span>
+</span><span>titles=titles[:-</span><span style="color:#d08770;">1</span><span>]</span><span>
+</span></code></pre>
+<p>The last element is related searches so i truncated it. As we can see from the screen shot the links are just the prvious a tag to h3 so we can get the links by:</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span>links=[]</span><span>
+</span><span style="color:#b48ead;">for </span><span>title </span><span style="color:#b48ead;">in </span><span>titles:</span><span>
+</span><span>    links.</span><span style="color:#bf616a;">append</span><span>(title.</span><span style="color:#bf616a;">find_previous</span><span>(&quot;</span><span style="color:#a3be8c;">a</span><span>&quot;))</span><span>
+</span></code></pre>
+<h2 id="storing-it-as-json">Storing it as JSON</h2>
+<p>We can store the information in a python list of dictionaries and output it as JSON. We will get the text from &quot;h3&quot; and the &quot;href&quot; from &quot;a&quot; element.</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span>ResultsList=[]</span><span>
+</span><span>ResultDict={}</span><span>
+</span><span style="color:#b48ead;">for </span><span>title,link </span><span style="color:#b48ead;">in </span><span style="color:#96b5b4;">zip</span><span>(titles,links):</span><span>
+</span><span>	ResultDict={}</span><span>
+</span><span>	</span><span style="color:#65737e;"># skipping google search results</span><span style="color:#65737e;">
+</span><span>​	</span><span style="color:#b48ead;">if </span><span>link[&quot;</span><span style="color:#a3be8c;">href</span><span>&quot;][</span><span style="color:#d08770;">7</span><span>:</span><span style="color:#d08770;">22</span><span>]==&quot;</span><span style="color:#a3be8c;">/www.google.com</span><span>&quot;:</span><span>
+</span><span>​		</span><span style="color:#b48ead;">continue</span><span>
+</span><span>​	ResultDict[&quot;</span><span style="color:#a3be8c;">title</span><span>&quot;]=title.text</span><span>
+</span><span>	</span><span style="color:#65737e;"># getting the actual URL from &quot;href&quot;</span><span style="color:#65737e;">
+</span><span>​	ResultDict[&quot;</span><span style="color:#a3be8c;">link</span><span>&quot;]=link[&quot;</span><span style="color:#a3be8c;">href</span><span>&quot;][</span><span style="color:#d08770;">7</span><span>:].</span><span style="color:#bf616a;">split</span><span>(&quot;</span><span style="color:#a3be8c;">&amp;</span><span>&quot;)[</span><span style="color:#d08770;">0</span><span>]</span><span>
+</span><span>​	ResultsList.</span><span style="color:#bf616a;">append</span><span>(ResultDict)</span><span>
+</span><span style="color:#96b5b4;">print</span><span>(json.</span><span style="color:#bf616a;">dumps</span><span>(ResultsList,</span><span style="color:#bf616a;">indent</span><span>=</span><span style="color:#d08770;">4</span><span>))</span><span>
+</span></code></pre>
+<p>The output looks like:
+<img src="/assets/web-scraping-in-python-2.png" alt="output" /></p>
+<h2 id="entire-code">Entire Code</h2>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span style="color:#b48ead;">import </span><span>requests</span><span>
+</span><span style="color:#b48ead;">from </span><span>bs4 </span><span style="color:#b48ead;">import </span><span>BeautifulSoup</span><span>
+</span><span style="color:#b48ead;">import </span><span>json</span><span>
+</span><span>
+</span><span>BaseUrl=&quot;</span><span style="color:#a3be8c;">https://www.google.com/search?q=</span><span>&quot;</span><span>
+</span><span>SearchTerm=&quot;</span><span style="color:#a3be8c;">foo+bar</span><span>&quot;</span><span>
+</span><span>Url=BaseUrl+SearchTerm</span><span>
+</span><span>r=requests.</span><span style="color:#bf616a;">get</span><span>(Url)</span><span>
+</span><span>
+</span><span>soup=</span><span style="color:#bf616a;">BeautifulSoup</span><span>(r.content,&quot;</span><span style="color:#a3be8c;">html.parser</span><span>&quot;)</span><span>
+</span><span>titles=soup.</span><span style="color:#bf616a;">find_all</span><span>(&quot;</span><span style="color:#a3be8c;">h3</span><span>&quot;)</span><span>
+</span><span>titles=titles[:-</span><span style="color:#d08770;">1</span><span>]</span><span>
+</span><span>
+</span><span>links=[]</span><span>
+</span><span style="color:#b48ead;">for </span><span>title </span><span style="color:#b48ead;">in </span><span>titles:</span><span>
+</span><span>    links.</span><span style="color:#bf616a;">append</span><span>(title.</span><span style="color:#bf616a;">find_previous</span><span>(&quot;</span><span style="color:#a3be8c;">a</span><span>&quot;))</span><span>
+</span><span>
+</span><span>ResultsList=[]</span><span>
+</span><span>ResultDict={}</span><span>
+</span><span style="color:#b48ead;">for </span><span>title,link </span><span style="color:#b48ead;">in </span><span style="color:#96b5b4;">zip</span><span>(titles,links):</span><span>
+</span><span>	ResultDict={}</span><span>
+</span><span>	</span><span style="color:#65737e;"># skipping google search results</span><span style="color:#65737e;">
+</span><span>​	</span><span style="color:#b48ead;">if </span><span>link[&quot;</span><span style="color:#a3be8c;">href</span><span>&quot;][</span><span style="color:#d08770;">7</span><span>:</span><span style="color:#d08770;">22</span><span>]==&quot;</span><span style="color:#a3be8c;">/www.google.com</span><span>&quot;:</span><span>
+</span><span>​		</span><span style="color:#b48ead;">continue</span><span>
+</span><span>​	ResultDict[&quot;</span><span style="color:#a3be8c;">title</span><span>&quot;]=title.text</span><span>
+</span><span>	</span><span style="color:#65737e;"># getting the actual URL from &quot;href&quot;</span><span style="color:#65737e;">
+</span><span>​	ResultDict[&quot;</span><span style="color:#a3be8c;">link</span><span>&quot;]=link[&quot;</span><span style="color:#a3be8c;">href</span><span>&quot;][</span><span style="color:#d08770;">7</span><span>:].</span><span style="color:#bf616a;">split</span><span>(&quot;</span><span style="color:#a3be8c;">&amp;</span><span>&quot;)[</span><span style="color:#d08770;">0</span><span>]</span><span>
+</span><span>​	ResultsList.</span><span style="color:#bf616a;">append</span><span>(ResultDict)</span><span>
+</span><span style="color:#96b5b4;">print</span><span>(json.</span><span style="color:#bf616a;">dumps</span><span>(ResultsList,</span><span style="color:#bf616a;">indent</span><span>=</span><span style="color:#d08770;">4</span><span>))</span><span>
+</span></code></pre>
+<h2 id="conclusion">Conclusion</h2>
+<p>You can take this one step further by taking the search term as an input from the user. I have only show you a small part of what Beautiful Soup can do, for more information go <a href="https://beautiful-soup-4.readthedocs.io/en/latest/">here</a>. Have fun experimenting with this!</p>
+
+          </div>
+        </article>
+      </div>
+      
+      <div class="column is-2 is-hidden-mobile">
+        <aside class="menu" style="position: sticky; top: 48px">
+          <p class="heading has-text-weight-bold">Contents</p>
+          <ul class="menu-list">
+            
+            <li>
+              <a id="link-requirements" class="toc is-size-7 is-active"
+                href="https://sakshamar.in/posts/web-scraping-in-python/#requirements">
+                Requirements
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-starting" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/web-scraping-in-python/#starting">
+                Starting
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-searching-html-through-beautifulsoup" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/web-scraping-in-python/#searching-html-through-beautifulsoup">
+                Searching HTML through BeautifulSoup
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-storing-it-as-json" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/web-scraping-in-python/#storing-it-as-json">
+                Storing it as JSON
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-entire-code" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/web-scraping-in-python/#entire-code">
+                Entire Code
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-conclusion" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/web-scraping-in-python/#conclusion">
+                Conclusion
+              </a>
+              
+            </li>
+            
+          </ul>
+        </aside>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+          
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts&#x2F;using-selenium-in-python&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              Using Selenium in Python
+            </a>
+          </div>
+           
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts&#x2F;linked-lists&#x2F;">
+              Linked lists<span class="icon ml-2">
+                <i class="fas fa-arrow-circle-right"></i>
+              </span>
+            </a>
+          </div>
+            
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-6">
+        <div id="disqus_thread"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <footer class="footer py-4">
+    <div class="content has-text-centered">
+      <p>
+        Built with
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-code"></i>
+          </span>
+          <span>code</span>
+        </span>
+        and
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-heart"></i>
+          </span>
+          <span>love</span>
+        </span>
+      </p>
+      <p>
+        Powered by
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-power-off"></i>
+          </span>
+          <span>zola</span>
+        </span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1.1.13/dist/chart.xkcd.min.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/folio/galleria.folio.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+  <script src="https://sakshamar.in/search_index.en.js"></script>
+  <script src="https://sakshamar.in/js/site.js"></script>
+
+  
+
+<script type="text/javascript">
+  const menuBarHeight = $("nav.navbar").height();
+  const tocItems = $('.toc');
+  const navSections = new Array($('.toc').length);
+
+  tocItems.each(function (i) {
+    let id = $(this).attr("id").substring(5);
+    navSections[i] = document.getElementById(id);
+  })
+
+  function isVisible(tocIndex) {
+    const current = navSections[tocIndex];
+    const next = tocIndex < tocItems.length - 1 ? navSections[tocIndex + 1] : $("section.section").get(1);
+
+    const c = current.getBoundingClientRect();
+    const n = next.getBoundingClientRect();
+    const h = (window.innerHeight || document.documentElement.clientHeight);
+
+    return (c.top <= h) && (c.top + (n.top - c.top) - menuBarHeight >= 0);
+  }
+
+  function activateIfVisible() {
+    for (b = true, i = 0; i < tocItems.length; i++) {
+      if (b && isVisible(i)) {
+        tocItems[i].classList.add('is-active');
+        b = false;
+      } else
+        tocItems[i].classList.remove('is-active');
+    }
+  }
+
+  var isTicking = null;
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      window.requestAnimationFrame(() => {
+        activateIfVisible();
+        isTicking = false;
+      });
+      isTicking = true;
+    }
+  }, false);
+</script>
+
+
+
+<script>
+  var disqus_config = function () {
+    this.page.url = "https://sakshamar.in";
+    this.page.identifier = "/posts/web-scraping-in-python/";
+  };
+
+  (function () {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://sakshamar.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+
+<!-- then add this badge component -->
+<script src="https://sakshamar.in/scripts/highlightjs-badge.js"></script>
+
+<script>
+    // apply HighlightJS
+    var pres = document.querySelectorAll("pre>code");
+    
+    // add HighlightJS-badge (options are optional)
+    var options = {   // optional
+       contentSelector: "#ArticleBody",
+       
+       // CSS class(es) used to render the copy icon.
+       copyIconClass: "fas fa-copy",
+       // CSS class(es) used to render the done icon.
+       checkIconClass: "fas fa-check text-success"
+    };
+    window.highlightJsBadge(options);
+</script>
+
+
+</body>
+
+</html>
