@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title> - golang</title>
+    <link rel="self" type="application/atom+xml" href="https://sakshamar.in/categories/golang/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://sakshamar.in"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-12-28T00:00:00+00:00</updated>
+    <id>https://sakshamar.in/categories/golang/atom.xml</id>
+    <entry xml:lang="en">
+        <title>What Happens when you convert a NAN to uint in Golang</title>
+        <published>2025-12-28T00:00:00+00:00</published>
+        <updated>2025-12-28T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://sakshamar.in/posts/what-happens-when-you-convert-a-nan-to-uint-golang/"/>
+        <id>https://sakshamar.in/posts/what-happens-when-you-convert-a-nan-to-uint-golang/</id>
+        
+        <content type="html" xml:base="https://sakshamar.in/posts/what-happens-when-you-convert-a-nan-to-uint-golang/">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+&lt;p&gt;Have you ever wondered what happens when you convert a &lt;code&gt;NAN&lt;&#x2F;code&gt; in Golang to an &lt;code&gt;uint64&lt;&#x2F;code&gt;? I always assumed it would be a big garbage value or 0, but after debugging a production bug for 1 day occuring seeming randomly, I found out the result is suprising.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;the-program&quot;&gt;The Program&lt;&#x2F;h1&gt;
+&lt;p&gt;Let&#x27;s take a simple program in golang which, just outputs this value using &lt;code&gt;Printf&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;go&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-go &quot;&gt;&lt;code class=&quot;language-go&quot; data-lang=&quot;go&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;package &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;main
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;fmt&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;func &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span&gt;:= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0.0
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b &lt;&#x2F;span&gt;&lt;span&gt;:= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0.0
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;fmt&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Printf&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The result is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;%d&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;uint64&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;))
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h1 id=&quot;output&quot;&gt;Output&lt;&#x2F;h1&gt;
+&lt;p&gt;On my laptop:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;laptop-output.png&quot; alt=&quot;output&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;This output seems to confirm my assumption of a large garbage value. Let&#x27;s try to run this again in a vm.&lt;&#x2F;p&gt;
+&lt;p&gt;I am using QEMU for creating the VM, following &lt;a href=&quot;https:&#x2F;&#x2F;www.redhat.com&#x2F;en&#x2F;blog&#x2F;vm-arm64-fedora&quot;&gt;this&lt;&#x2F;a&gt; guide from Redhat.&lt;&#x2F;p&gt;
+&lt;p&gt;And the output is:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;vm-out.png&quot; alt=&quot;vm-output&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;WAIT, WHAT?&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;explanation&quot;&gt;Explanation&lt;&#x2F;h1&gt;
+&lt;p&gt;As some people may have guessed, the difference between the two machines is CPU architure. My laptop runs on x86 while the vm runs on ARM64.&lt;&#x2F;p&gt;
+&lt;p&gt;I found &lt;a href=&quot;https:&#x2F;&#x2F;stackoverflow.com&#x2F;questions&#x2F;70425809&#x2F;why-is-uint64-of-nan-and-maxfloat64-equal-in-golang&quot;&gt;this&lt;&#x2F;a&gt; excellent stack overflow which explains the difference. Essentially, Golang just runs the hardware instruction required for converting &lt;code&gt;NAN&lt;&#x2F;code&gt; to &lt;code&gt;uint&lt;&#x2F;code&gt; and the value is depended on the CPU architecture. On x86, &lt;code&gt;CVTTSD2SI&lt;&#x2F;code&gt; is run which raises an exception which is masked by golang due to which &lt;code&gt;0x8000000000000000&lt;&#x2F;code&gt; (i.e. &lt;code&gt;9223372036854775808&lt;&#x2F;code&gt;) is returned. On Arm64, &lt;code&gt;FCVTZS&lt;&#x2F;code&gt; is run which returns 0 for NAN.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;how-do-other-languages-fare&quot;&gt;How do other languages fare?&lt;&#x2F;h1&gt;
+&lt;p&gt;I tried the same with C++ and Rust, to see if they also show the same behaviour,&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;c&quot;&gt;C++&lt;&#x2F;h2&gt;
+&lt;p&gt;The program:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;cpp&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-cpp &quot;&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;#include &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;cstdint&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;#include &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;cstdio&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main &lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;double&lt;&#x2F;span&gt;&lt;span&gt; a, b = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;printf&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The value is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;%d&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, (uint64_t)(a&#x2F;b));
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Output on my laptop:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;cpp-laptop-output.png&quot; alt=&quot;cpp-laptop-output&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Output on VM:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;cpp-vm-output.png&quot; alt=&quot;cpp-vm-output&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;rust&quot;&gt;Rust&lt;&#x2F;h2&gt;
+&lt;p&gt;The program:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; a: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f64 &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0.0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; b: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f64 &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0.0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; c = (a&#x2F;b) as &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;u64&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The Value is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, c);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Output on my laptop:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;rust-laptop-output.png&quot; alt=&quot;rust-laptop-output&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Output on VM:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;rust-vm-output.png&quot; alt=&quot;rust-vm-output&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;&#x2F;h1&gt;
+&lt;p&gt;Only rust shows same output on both platforms, while cpp and golang have different output.
+This is the first time i noticed the output of a golang program changing based on the underlying CPU architecture.&lt;&#x2F;p&gt;
+&lt;p&gt;I find this very suprising given the focus of Simplicity in GO but &lt;code&gt;NAN&lt;&#x2F;code&gt; checks may not be there due to performance reasons. We should always avoid &lt;code&gt;NAN&lt;&#x2F;code&gt; value in our code as this can lead to undefined behaviour.&lt;&#x2F;p&gt;
+&lt;p&gt;If there are any more platform dependent things in golang please feel free to share them in the comments.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

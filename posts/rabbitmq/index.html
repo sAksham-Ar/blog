@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.css" integrity="sha384-+rY0QD+LRnTOquDMzGa9lXU6jIwdiQuwCJQ2cdcW0qeP/0UbjQCZlXnRsUMA+9pH" crossorigin="anonymous">
+  
+
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.1/css/academicons.min.css" integrity="sha384-FIue+PI4SsI9XfHCz8dBLg33b0c1fMJgNU3X//L26FYbGnlSEfWmNT7zgWc2N9b6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link href="https://sakshamar.in/deep-thought.css" rel="stylesheet" />
+  
+  
+
+  <title>
+    
+ | Keeping Microservices in Sync using RabbitMQ
+
+  </title>
+
+  
+  
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mathtex-script-type.min.js" integrity="sha384-jiBVvJ8NGGj5n7kJaiWwWp9AjC+Yh8rhZY3GtAX8yU28azcLgoRo4oukO87g7zDT" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item is-size-5 has-text-weight-bold" href="https:&#x2F;&#x2F;sakshamar.in"></a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;categories">
+            Categories
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            Keeping Microservices in Sync using RabbitMQ
+          </h1>
+          <p class="subtitle">This blog describes how we kept our microservices in sync with RabbitMQ for Opensoft event.</p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>sAksham-Ar published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2022-03-25">March 25, 2022</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>2 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>394 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://sakshamar.in/categories/rabbitmq/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>RabbitMQ</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <h2 id="introduction">Introduction</h2>
+<p>This Year's Opensoft Problem Statement was very interesting from a DevOps perspective. Basically, we had to convert a Monolithic Application to Microservices, Dockerize the microservices and then deploy them on Kubernetes.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>We have created 7 microservices and each microservice has its own database, but some data has to be shared between multiple microservices. Keeping a single database for these defeats the point of creating microservices. We ended up using <a href="https://www.rabbitmq.com/">RabbitMQ</a> for keeping the important data in sync between microservices.</p>
+<h2 id="rabbitmq">RabbitMQ</h2>
+<p>In RabbitMQ, each microservice has its own queue and all essential microservices can produce data to these queues. We used <code>fanout</code> type of exchange where every producer published to all the queues. Each microservice then consumes the message and acts according to the <code>properties.content_type</code> which we sent during producing.</p>
+<h2 id="producing">Producing</h2>
+<p>For producing in Django, we just have to write a <code>producer.py</code>,</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#b48ead;">import </span><span>pika, json
+</span><span style="color:#b48ead;">from </span><span>django.conf </span><span style="color:#b48ead;">import </span><span>settings
+</span><span>
+</span><span style="color:#bf616a;">RABBITMQ_URL </span><span>= settings.</span><span style="color:#bf616a;">RABBITMQ_URL
+</span><span>params = pika.</span><span style="color:#bf616a;">URLParameters</span><span>(</span><span style="color:#bf616a;">RABBITMQ_URL</span><span>+&quot;</span><span style="color:#a3be8c;">?heartbeat=600&amp;</span><span>&quot;+&quot;</span><span style="color:#a3be8c;">blocked_connection_timeout=300</span><span>&quot;)
+</span><span>
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">publish</span><span>(</span><span style="color:#bf616a;">method</span><span>, </span><span style="color:#bf616a;">body</span><span>):
+</span><span>    connection = pika.</span><span style="color:#bf616a;">BlockingConnection</span><span>(params)
+</span><span>
+</span><span>    exchange_queue = &#39;</span><span style="color:#a3be8c;">logs</span><span>&#39;
+</span><span>    channel = connection.</span><span style="color:#bf616a;">channel</span><span>()
+</span><span>    channel.</span><span style="color:#bf616a;">exchange_declare</span><span>(</span><span style="color:#bf616a;">exchange</span><span>=exchange_queue, </span><span style="color:#bf616a;">exchange_type</span><span>=&#39;</span><span style="color:#a3be8c;">fanout</span><span>&#39;)   
+</span><span>
+</span><span>    properties = pika.</span><span style="color:#bf616a;">BasicProperties</span><span>(method)
+</span><span>    channel.</span><span style="color:#bf616a;">basic_publish</span><span>(</span><span style="color:#bf616a;">exchange</span><span>=exchange_queue, </span><span style="color:#bf616a;">routing_key</span><span>=&#39;&#39;, </span><span style="color:#bf616a;">body</span><span>=json.</span><span style="color:#bf616a;">dumps</span><span>(body), </span><span style="color:#bf616a;">properties</span><span>=properties)
+</span><span>
+</span><span>    connection.</span><span style="color:#bf616a;">close</span><span>()
+</span></code></pre>
+<p>Now wherever we want to publish, we just import the publish function and send the method(which defines the <code>properties.content_type</code>) and the body.</p>
+<h2 id="consuming">Consuming</h2>
+<p>For consuming, we have to write a <code>consumer.py</code>. An example from the Restaurant Menu microservice which keeps track of items of each restaurant,</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#b48ead;">import </span><span>pika, json
+</span><span style="color:#b48ead;">import </span><span>os
+</span><span style="color:#b48ead;">import </span><span>django
+</span><span style="color:#b48ead;">from </span><span>sys </span><span style="color:#b48ead;">import </span><span>path
+</span><span>
+</span><span>path.</span><span style="color:#bf616a;">append</span><span>(os.</span><span style="color:#bf616a;">getcwd</span><span>()+&#39;</span><span style="color:#a3be8c;">/restaurant_menu/settings.py</span><span>&#39;)
+</span><span>os.environ.</span><span style="color:#bf616a;">setdefault</span><span>(&#39;</span><span style="color:#a3be8c;">DJANGO_SETTINGS_MODULE</span><span>&#39;, &#39;</span><span style="color:#a3be8c;">restaurant_menu.settings</span><span>&#39;) 
+</span><span>django.</span><span style="color:#bf616a;">setup</span><span>()
+</span><span style="color:#b48ead;">from </span><span>restaurant_menu_app.models </span><span style="color:#b48ead;">import </span><span>Restaurant, MenuItem
+</span><span style="color:#b48ead;">from </span><span>restaurant_menu_app.serializers </span><span style="color:#b48ead;">import </span><span>RestaurantSerializer, MenuItemSerializer
+</span><span style="color:#b48ead;">from </span><span>django.conf </span><span style="color:#b48ead;">import </span><span>settings
+</span><span style="color:#b48ead;">from </span><span>django.contrib.auth.hashers </span><span style="color:#b48ead;">import </span><span>make_password
+</span><span style="color:#b48ead;">from </span><span>restaurant_menu_app.producer </span><span style="color:#b48ead;">import </span><span>publish
+</span><span>
+</span><span style="color:#bf616a;">RABBITMQ_URL </span><span>= settings.</span><span style="color:#bf616a;">RABBITMQ_URL
+</span><span>
+</span><span>params = pika.</span><span style="color:#bf616a;">URLParameters</span><span>(</span><span style="color:#bf616a;">RABBITMQ_URL</span><span>)
+</span><span>connection = pika.</span><span style="color:#bf616a;">BlockingConnection</span><span>(params)
+</span><span>
+</span><span>exchange_queue = &#39;</span><span style="color:#a3be8c;">logs</span><span>&#39;
+</span><span>channel = connection.</span><span style="color:#bf616a;">channel</span><span>()
+</span><span>channel.</span><span style="color:#bf616a;">exchange_declare</span><span>(</span><span style="color:#bf616a;">exchange</span><span>=exchange_queue, </span><span style="color:#bf616a;">exchange_type</span><span>=&#39;</span><span style="color:#a3be8c;">fanout</span><span>&#39;)
+</span><span>
+</span><span>result = channel.</span><span style="color:#bf616a;">queue_declare</span><span>(</span><span style="color:#bf616a;">queue</span><span>=&#39;&#39;, </span><span style="color:#bf616a;">exclusive</span><span>=</span><span style="color:#d08770;">True</span><span>)
+</span><span>queue_name = result.method.queue
+</span><span>
+</span><span>exchange_queue = &#39;</span><span style="color:#a3be8c;">logs</span><span>&#39;
+</span><span>channel.</span><span style="color:#bf616a;">queue_bind</span><span>(</span><span style="color:#bf616a;">exchange</span><span>=exchange_queue, </span><span style="color:#bf616a;">queue</span><span>=queue_name)
+</span><span>
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">callback</span><span>(</span><span style="color:#bf616a;">ch</span><span>, </span><span style="color:#bf616a;">method</span><span>, </span><span style="color:#bf616a;">properties</span><span>, </span><span style="color:#bf616a;">body</span><span>):
+</span><span>    </span><span style="color:#96b5b4;">print</span><span>(&quot;</span><span style="color:#a3be8c;">Received in Restaurant Menu Item Application</span><span>&quot;, </span><span style="color:#bf616a;">flush</span><span>=</span><span style="color:#d08770;">True</span><span>)
+</span><span>    data = json.</span><span style="color:#bf616a;">loads</span><span>(body)
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">elif </span><span>properties.content_type == &#39;</span><span style="color:#a3be8c;">RESTAURANT_CREATED</span><span>&#39;:
+</span><span>        data[&quot;</span><span style="color:#a3be8c;">password</span><span>&quot;] = </span><span style="color:#bf616a;">make_password</span><span>(data[&quot;</span><span style="color:#a3be8c;">password</span><span>&quot;])
+</span><span>        serializer = </span><span style="color:#bf616a;">RestaurantSerializer</span><span>(</span><span style="color:#bf616a;">data</span><span>=data)
+</span><span>        </span><span style="color:#b48ead;">if </span><span>serializer.</span><span style="color:#bf616a;">is_valid</span><span>():
+</span><span>            serializer.</span><span style="color:#bf616a;">save</span><span>()
+</span></code></pre>
+<p>We have to run <code>consumer.py</code> separate from our Django application and this will keep the important data in sync.</p>
+<h2 id="syncing-data-between-clusters">Syncing Data between Clusters</h2>
+<p>For the Problem Statement we had to deploy 2 clusters. For keeping the data of same microservices in sync in different clusters, what we did was when a new data was being sent to the backend we did not save it, rather we published to RabbitMQ. The RabbitMQ queue does the job of keeping the data in sync with the same microservice from the other cluster. For example in <code>consumer.py</code> of the Restaurant microservice,</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span>    </span><span style="color:#b48ead;">if</span><span>(properties.content_type==&quot;</span><span style="color:#a3be8c;">RESTAURANT_SIGNUP</span><span>&quot;):
+</span><span>        </span><span style="color:#65737e;"># If a restaurnat signups
+</span><span>        raw_password = data[&quot;</span><span style="color:#a3be8c;">password</span><span>&quot;]
+</span><span>        data[&quot;</span><span style="color:#a3be8c;">password</span><span>&quot;] = </span><span style="color:#bf616a;">make_password</span><span>(raw_password)
+</span><span>        serializer = </span><span style="color:#bf616a;">RestaurantSerializer</span><span>(</span><span style="color:#bf616a;">data</span><span>=data)
+</span><span>        </span><span style="color:#b48ead;">if</span><span>(serializer.</span><span style="color:#bf616a;">is_valid</span><span>()):
+</span><span>            restaurant = serializer.</span><span style="color:#bf616a;">save</span><span>()
+</span><span>            data_to_be_published = {
+</span><span>                &#39;</span><span style="color:#a3be8c;">restaurant_id</span><span>&#39;: restaurant.restaurant_id,
+</span><span>                &#39;</span><span style="color:#a3be8c;">email</span><span>&#39;: data[&#39;</span><span style="color:#a3be8c;">email</span><span>&#39;],
+</span><span>                &#39;</span><span style="color:#a3be8c;">password</span><span>&#39;: raw_password,
+</span><span>                &quot;</span><span style="color:#a3be8c;">restaurant_name</span><span>&quot;: data[&#39;</span><span style="color:#a3be8c;">restaurant_name</span><span>&#39;]
+</span><span>            }
+</span><span>            </span><span style="color:#bf616a;">publish</span><span>(</span><span style="color:#bf616a;">method</span><span>=&quot;</span><span style="color:#a3be8c;">RESTAURANT_CREATED</span><span>&quot;, </span><span style="color:#bf616a;">body</span><span>=data_to_be_published)
+</span></code></pre>
+<h2 id="problems-we-faced">Problems we faced</h2>
+<p>RabbitMQ was very hard to debug as if a consumer errors out the data in the microservices becomes inconsistent leading to strange behaviour in the app. We were using RabbitMQ hosted on <a href="https://www.cloudamqp.com/">CloudAMQP</a> which sometimes force closed the connection to consumers and that lead to features stopping randomly. Working with RabbitMQ was a very frustrating experience for us and <a href="https://kafka.apache.org/">Apache Kafka</a> or <a href="https://aws.amazon.com/sqs/">Amazon SQS</a> may yield better results.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This is how we kept our microservices in sync. You can read the entire Problem Statement <a href="https://drive.google.com/file/d/1Mv5Ro2gi5nl3zGhA4IR3NMpwZdXXmL2M/view?fbclid=IwAR3IrikkanZaprOreedwmbIFp5YtudefssTREd5RFByRYoBKcOGG2QpotUw">here.</a></p>
+
+          </div>
+        </article>
+      </div>
+      
+      <div class="column is-2 is-hidden-mobile">
+        <aside class="menu" style="position: sticky; top: 48px">
+          <p class="heading has-text-weight-bold">Contents</p>
+          <ul class="menu-list">
+            
+            <li>
+              <a id="link-introduction" class="toc is-size-7 is-active"
+                href="https://sakshamar.in/posts/rabbitmq/#introduction">
+                Introduction
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-the-problem" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/rabbitmq/#the-problem">
+                The Problem
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-rabbitmq" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/rabbitmq/#rabbitmq">
+                RabbitMQ
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-producing" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/rabbitmq/#producing">
+                Producing
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-consuming" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/rabbitmq/#consuming">
+                Consuming
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-syncing-data-between-clusters" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/rabbitmq/#syncing-data-between-clusters">
+                Syncing Data between Clusters
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-problems-we-faced" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/rabbitmq/#problems-we-faced">
+                Problems we faced
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-conclusion" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/rabbitmq/#conclusion">
+                Conclusion
+              </a>
+              
+            </li>
+            
+          </ul>
+        </aside>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+              
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts&#x2F;kubernetes&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              Deploying Microservices on Kubernetes
+            </a>
+          </div>
+           
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts&#x2F;what-happens-when-you-convert-a-nan-to-uint-golang&#x2F;">
+              What Happens when you convert a NAN to uint in Golang<span class="icon ml-2">
+                <i class="fas fa-arrow-circle-right"></i>
+              </span>
+            </a>
+          </div>
+          
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-6">
+        <div id="disqus_thread"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+  <footer class="footer py-4">
+    <div class="content has-text-centered">
+      <p>
+        Built with
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-code"></i>
+          </span>
+          <span>code</span>
+        </span>
+        and
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-heart"></i>
+          </span>
+          <span>love</span>
+        </span>
+      </p>
+      <p>
+        Powered by
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-power-off"></i>
+          </span>
+          <span>zola</span>
+        </span>
+      </p>
+    </div>
+  </footer>
+  
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/galleria.min.js" integrity="sha384-QSfwGT8/EU536DKdtyP2D6SLlh8zBaZ0cVkwfrwhqzIU9VCfJT00CLVP5t+HAiYg" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.js" integrity="sha384-DwpKI+deZB267+hPKwiOIc5Y2GKsVL0mR6hgz7GgIu7AgAMYqJwcJKY1YBNfhWcY" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@8.13.5/dist/mermaid.min.js" integrity="sha384-0yWn54pSGtfKCU+skfA69l25VsCw+MZt4LQov3xNRoS7YkAMrFokGgSBnAWSK4pv" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1.1.13/dist/chart.xkcd.min.js" integrity="sha384-xC3h1+IHXK8seA+8KfT79Z4e0GPsznjXBoMa5nd8ooWKplPyXx92NOmljWxLC/cs" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://sakshamar.in/elasticlunr.min.js"></script>
+  <script src="https://sakshamar.in/search_index.en.js"></script><script src="https://sakshamar.in/js/site.js"></script>
+
+  
+
+<script type="text/javascript">
+  const menuBarHeight = document.querySelector("nav.navbar").clientHeight;
+  const tocItems = document.querySelectorAll(".toc");
+  const navSections = new Array(tocItems.length);
+
+  tocItems.forEach((el, i) => {
+    let id = el.getAttribute("id").substring(5);
+    navSections[i] = document.getElementById(id);
+  })
+
+  function isVisible(tocIndex) {
+    const current = navSections[tocIndex];
+    const next = tocIndex < tocItems.length - 1 ? navSections[tocIndex + 1]
+      : document.querySelectorAll("section.section").item(1);
+
+    const c = current.getBoundingClientRect();
+    const n = next.getBoundingClientRect();
+    const h = (window.innerHeight || document.documentElement.clientHeight);
+
+    return (c.top <= h) && (n.top - menuBarHeight >= 0);
+  }
+
+  function activateIfVisible() {
+    for (b = true, i = 0; i < tocItems.length; i++) {
+      if (b && isVisible(i)) {
+        tocItems[i].classList.add('is-active');
+        b = false;
+      } else
+        tocItems[i].classList.remove('is-active');
+    }
+  }
+
+  var isTicking = null;
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      window.requestAnimationFrame(() => {
+        activateIfVisible();
+        isTicking = false;
+      });
+      isTicking = true;
+    }
+  }, false);
+</script>
+
+
+
+<script>
+  var disqus_config = function () {
+    this.page.url = "https://sakshamar.in";
+    this.page.identifier = "/posts/rabbitmq/";
+  };
+
+  (function () {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://sakshamar.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+
+
+
+  
+  
+</body>
+
+</html>

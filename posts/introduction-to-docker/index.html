@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.css" integrity="sha384-+rY0QD+LRnTOquDMzGa9lXU6jIwdiQuwCJQ2cdcW0qeP/0UbjQCZlXnRsUMA+9pH" crossorigin="anonymous">
+  
+
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.1/css/academicons.min.css" integrity="sha384-FIue+PI4SsI9XfHCz8dBLg33b0c1fMJgNU3X//L26FYbGnlSEfWmNT7zgWc2N9b6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link href="https://sakshamar.in/deep-thought.css" rel="stylesheet" />
+  
+  
+
+  <title>
+    
+ | Introduction to Docker
+
+  </title>
+
+  
+  
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mathtex-script-type.min.js" integrity="sha384-jiBVvJ8NGGj5n7kJaiWwWp9AjC+Yh8rhZY3GtAX8yU28azcLgoRo4oukO87g7zDT" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item is-size-5 has-text-weight-bold" href="https:&#x2F;&#x2F;sakshamar.in"></a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;categories">
+            Categories
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            Introduction to Docker
+          </h1>
+          <p class="subtitle">Learning Docker through an example</p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>sAksham-Ar published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2021-09-29">September 29, 2021</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>4 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>743 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://sakshamar.in/categories/docker/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>Docker</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <p>I have been playing around with Docker during the last few days ,and I am quite impressed by its abilities. I am writing this blog to share what I have learnt by trying to dockerize a simple Flask app.</p>
+<h2 id="what-is-docker">What is Docker?</h2>
+<p>Docker is an open source containerizing platform, It enables developers package their applications into containers.</p>
+<h2 id="what-is-a-container">What is a Container?</h2>
+<p>According to <a href="https://cloud.google.com/learn/what-are-containers">Google</a>,</p>
+<blockquote>
+<p>Containers are lightweight packages of your application code together with dependencies such as specific versions of programming language runtimes and libraries required to run your software services.</p>
+</blockquote>
+<h2 id="what-are-the-advantages-of-docker">What are the advantages of Docker?</h2>
+<p>The major advantage of using docker is that you do not need to setup your application again and again for different servers, you can just create a docker image once and then deploy it easily on other servers. It also helps when different applications require different versions dependencies as running them in separate containers prevents dependency conflict.</p>
+<h2 id="building-the-application">Building the Application</h2>
+<p>Let us take a simple Flask app and try to dockerize it.</p>
+<p>Code of the app:</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span style="color:#b48ead;">from </span><span>flask </span><span style="color:#b48ead;">import </span><span>Flask
+</span><span style="color:#b48ead;">import </span><span>mysql.connector
+</span><span style="color:#b48ead;">from </span><span>mysql.connector </span><span style="color:#b48ead;">import </span><span>errorcode
+</span><span>
+</span><span>app = </span><span style="color:#bf616a;">Flask</span><span>(__name__)
+</span><span>
+</span><span>@app.</span><span style="color:#bf616a;">route</span><span>(&#39;</span><span style="color:#a3be8c;">/</span><span>&#39;)
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">connect</span><span>():
+</span><span>    </span><span style="color:#b48ead;">try</span><span>:
+</span><span>        mydb = mysql.connector.</span><span style="color:#bf616a;">connect</span><span>(
+</span><span>            </span><span style="color:#bf616a;">host</span><span>=&quot;</span><span style="color:#a3be8c;">localhost</span><span>&quot;,
+</span><span>            </span><span style="color:#bf616a;">user</span><span>=&quot;</span><span style="color:#a3be8c;">docker_user</span><span>&quot;,
+</span><span>            </span><span style="color:#bf616a;">password</span><span>=&quot;</span><span style="color:#a3be8c;">Docker@123</span><span>&quot;,
+</span><span>            </span><span style="color:#bf616a;">database</span><span>=&quot;</span><span style="color:#a3be8c;">docker</span><span>&quot;
+</span><span>        )
+</span><span>        </span><span style="color:#b48ead;">return </span><span>&quot;</span><span style="color:#a3be8c;">Connected</span><span>&quot;
+</span><span>    </span><span style="color:#b48ead;">except </span><span>mysql.connector.Error </span><span style="color:#b48ead;">as </span><span>err:
+</span><span>        </span><span style="color:#b48ead;">if </span><span>err.errno == errorcode.</span><span style="color:#bf616a;">ER_ACCESS_DENIED_ERROR</span><span>:
+</span><span>            </span><span style="color:#b48ead;">return </span><span>&quot;</span><span style="color:#a3be8c;">Something is wrong with your user name or password</span><span>&quot;
+</span><span>        </span><span style="color:#b48ead;">elif </span><span>err.errno == errorcode.</span><span style="color:#bf616a;">ER_BAD_DB_ERROR</span><span>:
+</span><span>            </span><span style="color:#b48ead;">return </span><span>&quot;</span><span style="color:#a3be8c;">Database does not exist</span><span>&quot;
+</span><span>        </span><span style="color:#b48ead;">else</span><span>:
+</span><span>            </span><span style="color:#b48ead;">return </span><span style="color:#bf616a;">str</span><span>(err)
+</span><span>
+</span><span style="color:#b48ead;">if </span><span>__name__ == &#39;</span><span style="color:#a3be8c;">__main__</span><span>&#39;:
+</span><span>    app.</span><span style="color:#bf616a;">run</span><span>(</span><span style="color:#bf616a;">debug</span><span>=</span><span style="color:#d08770;">True</span><span>)
+</span></code></pre>
+<p>Requirements of the app:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>mysql-connector-python
+</span><span>flask
+</span></code></pre>
+<p>The app just tries to connect to MySQL as user <code>docker_user</code> to access database <code>docker</code> and returns
+<code>Connected</code> if the connection is successful.</p>
+<p>Now we need to create this user and database in MySQL.
+Start the MySQL client and run the following commands,</p>
+<pre data-lang="sql" style="background-color:#2b303b;color:#c0c5ce;" class="language-sql "><code class="language-sql" data-lang="sql"><span style="color:#b48ead;">CREATE DATABASE </span><span style="color:#8fa1b3;">docker</span><span>;
+</span><span style="color:#b48ead;">CREATE USER </span><span style="color:#8fa1b3;">docker_user</span><span>@&#39;</span><span style="color:#a3be8c;">localhost</span><span>&#39; identified by &#39;</span><span style="color:#a3be8c;">Docker@123</span><span>&#39;;
+</span><span style="color:#b48ead;">GRANT</span><span> ALL PRIVILEGES ON docker.</span><span style="color:#bf616a;">*</span><span> TO docker_user;
+</span><span>FLUSH PRIVILEGES;
+</span></code></pre>
+<p>This first creates the database <code>docker</code>, then it creates the user <code>docker_user</code> and then grants privileges of the database <code>docker</code> to <code>docker_user</code>.</p>
+<p>Now after running the app and visiting it in the browser we see,</p>
+<p><img src="/assets/docker-output-1.png" alt="app output" /></p>
+<h2 id="dockerizing-the-application">Dockerizing the Application</h2>
+<p>To create an image from the application, we would need to write a Dockerfile. The Dockerfile for this application is,</p>
+<pre data-lang="Dockerfile" style="background-color:#2b303b;color:#c0c5ce;" class="language-Dockerfile "><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#65737e;"># syntax=docker/dockerfile:1
+</span><span>
+</span><span style="color:#b48ead;">FROM</span><span> python:3.9-slim-buster
+</span><span style="color:#b48ead;">WORKDIR </span><span>/app
+</span><span style="color:#b48ead;">COPY</span><span> requirements.txt requirements.txt
+</span><span style="color:#b48ead;">RUN </span><span>pip install -r requirements.txt
+</span><span style="color:#b48ead;">COPY</span><span> . .
+</span><span style="color:#b48ead;">ARG </span><span>FLASK_PORT=5000
+</span><span style="color:#b48ead;">ENV </span><span>FLASK_PORT=$FLASK_PORT
+</span><span>ENTRYPOINT python3 -m flask run --host=0.0.0.0 --port=${FLASK_PORT}
+</span></code></pre>
+<p>Here we are first taking a base image of python3.9 which already has python and pip installed, then we are a creating a working directory so that we can write relative paths. We then copy our <code>requirements.txt</code> to our working directory and install the packages needed. Finally, we copy our code, taking <code>port</code> as an environment variable, and run the app.</p>
+<p><strong>Note: it is important to run the flask app on <code>0.0.0.0</code> else we will note be able to forward it.</strong></p>
+<p>Now, we can build the image using,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">docker</span><span> build</span><span style="color:#bf616a;"> --tag</span><span> flask-docker .
+</span></code></pre>
+<p>Now using <code>docker images</code> we can see that our image has been built,</p>
+<p><img src="/assets/docker-images.png" alt="docker images output" /></p>
+<p>Now for MySQL, there is already an official image on <a href="https://hub.docker.com/_/mysql">docker hub</a> (it is a website from where docker gets images uploaded by other people), we just need to pass our environment variables,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">docker</span><span> run</span><span style="color:#bf616a;"> --name</span><span> db</span><span style="color:#bf616a;"> -e</span><span> MYSQL_ROOT_PASSWORD=&quot;</span><span style="color:#a3be8c;">Docker@123</span><span>&quot;</span><span style="color:#bf616a;"> -e</span><span> MYSQL_DATABASE=&quot;</span><span style="color:#a3be8c;">docker</span><span>&quot;</span><span style="color:#bf616a;"> -e</span><span> MYSQL_USER=&quot;</span><span style="color:#a3be8c;">docker_user</span><span>&quot;</span><span style="color:#bf616a;"> -e</span><span> MYSQL_PASSWORD=&quot;</span><span style="color:#a3be8c;">Docker@123</span><span>&quot;</span><span style="color:#bf616a;"> -d</span><span> mysql
+</span></code></pre>
+<p>Here <code>-d</code> is for running in detached mode, by default docker is attached to the terminal so when we close it our application will also close.</p>
+<p>Now, let's run our app on port <code>5000</code>,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">docker</span><span> run</span><span style="color:#bf616a;"> --name</span><span> app</span><span style="color:#bf616a;"> -e</span><span> FLASK_PORT=&quot;</span><span style="color:#a3be8c;">5000</span><span>&quot;</span><span style="color:#bf616a;"> -p</span><span> 5000:5000</span><span style="color:#bf616a;"> -d</span><span> flask-docker
+</span></code></pre>
+<p>The <code>-p</code> flag maps the port <code>5000</code> of our pc to <code>5000</code> of the Docker conatiner.</p>
+<p><img src="/assets/docker-output-without-network.png" alt="app output without link" /></p>
+<h2 id="networks">Networks</h2>
+<p>As we can see our app cannot reach the database even though the database is running this is because they are running in separate containers. With Docker, we can add them both in the same network.</p>
+<p>First let us create a network,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">docker</span><span> network create my_network
+</span></code></pre>
+<p>Then, changing the host in our app.py to name of the MySQL container <code>db</code> and rebuilding the image,</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span style="color:#b48ead;">from </span><span>flask </span><span style="color:#b48ead;">import </span><span>Flask
+</span><span style="color:#b48ead;">import </span><span>mysql.connector
+</span><span style="color:#b48ead;">from </span><span>mysql.connector </span><span style="color:#b48ead;">import </span><span>errorcode
+</span><span>
+</span><span>app = </span><span style="color:#bf616a;">Flask</span><span>(__name__)
+</span><span>
+</span><span>@app.</span><span style="color:#bf616a;">route</span><span>(&#39;</span><span style="color:#a3be8c;">/</span><span>&#39;)
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">connect</span><span>():
+</span><span>    </span><span style="color:#b48ead;">try</span><span>:
+</span><span>        mydb = mysql.connector.</span><span style="color:#bf616a;">connect</span><span>(
+</span><span>            </span><span style="color:#bf616a;">host</span><span>=&quot;</span><span style="color:#a3be8c;">db</span><span>&quot;,
+</span><span>            </span><span style="color:#bf616a;">user</span><span>=&quot;</span><span style="color:#a3be8c;">docker_user</span><span>&quot;,
+</span><span>            </span><span style="color:#bf616a;">password</span><span>=&quot;</span><span style="color:#a3be8c;">Docker@123</span><span>&quot;,
+</span><span>            </span><span style="color:#bf616a;">database</span><span>=&quot;</span><span style="color:#a3be8c;">docker</span><span>&quot;
+</span><span>        )
+</span><span>        </span><span style="color:#b48ead;">return </span><span>&quot;</span><span style="color:#a3be8c;">Connected</span><span>&quot;
+</span><span>    </span><span style="color:#b48ead;">except </span><span>mysql.connector.Error </span><span style="color:#b48ead;">as </span><span>err:
+</span><span>        </span><span style="color:#b48ead;">if </span><span>err.errno == errorcode.</span><span style="color:#bf616a;">ER_ACCESS_DENIED_ERROR</span><span>:
+</span><span>            </span><span style="color:#b48ead;">return </span><span>&quot;</span><span style="color:#a3be8c;">Something is wrong with your user name or password</span><span>&quot;
+</span><span>        </span><span style="color:#b48ead;">elif </span><span>err.errno == errorcode.</span><span style="color:#bf616a;">ER_BAD_DB_ERROR</span><span>:
+</span><span>            </span><span style="color:#b48ead;">return </span><span>&quot;</span><span style="color:#a3be8c;">Database does not exist</span><span>&quot;
+</span><span>        </span><span style="color:#b48ead;">else</span><span>:
+</span><span>            </span><span style="color:#b48ead;">return </span><span style="color:#bf616a;">str</span><span>(err)
+</span><span>
+</span><span style="color:#b48ead;">if </span><span>__name__ == &#39;</span><span style="color:#a3be8c;">__main__</span><span>&#39;:
+</span><span>    app.</span><span style="color:#bf616a;">run</span><span>(</span><span style="color:#bf616a;">debug</span><span>=</span><span style="color:#d08770;">True</span><span>)
+</span></code></pre>
+<p>Finally, we rerun our db and app with this network,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">docker</span><span> run</span><span style="color:#bf616a;"> --name</span><span> db</span><span style="color:#bf616a;"> -e</span><span> MYSQL_ROOT_PASSWORD=&quot;</span><span style="color:#a3be8c;">Docker@123</span><span>&quot;</span><span style="color:#bf616a;"> -e</span><span> MYSQL_DATABASE=&quot;</span><span style="color:#a3be8c;">docker</span><span>&quot;</span><span style="color:#bf616a;"> -e</span><span> MYSQL_USER=&quot;</span><span style="color:#a3be8c;">docker_user</span><span>&quot;</span><span style="color:#bf616a;"> -e</span><span> MYSQL_PASSWORD=&quot;</span><span style="color:#a3be8c;">Docker@123</span><span>&quot;</span><span style="color:#bf616a;"> -d  --network</span><span> my_network mysql
+</span><span style="color:#bf616a;">docker</span><span> run</span><span style="color:#bf616a;"> --name</span><span> app</span><span style="color:#bf616a;"> -e</span><span> FLASK_PORT=&quot;</span><span style="color:#a3be8c;">5000</span><span>&quot;</span><span style="color:#bf616a;"> -p</span><span> 5000:5000</span><span style="color:#bf616a;"> -d --network</span><span> my_network flask-docker
+</span></code></pre>
+<p>Now going to <code>http://localhost:5000/</code>,</p>
+<p><img src="/assets/docker-final-output.png" alt="final output" /></p>
+<h2 id="docker-compose">Docker-compose</h2>
+<p>As you can probably see that the commands we have to run have become very long, and we need to rerun then every time we change our image or our configuration. The solution to this is <code>docker-compose</code>, we just need to create a <code>docker-compose.yml</code> file.
+For our current setup:</p>
+<pre data-lang="yml" style="background-color:#2b303b;color:#c0c5ce;" class="language-yml "><code class="language-yml" data-lang="yml"><span style="color:#bf616a;">version</span><span>: &quot;</span><span style="color:#a3be8c;">3.9</span><span>&quot;
+</span><span style="color:#bf616a;">services</span><span>: 
+</span><span>  </span><span style="color:#bf616a;">app</span><span>: 
+</span><span>    </span><span style="color:#bf616a;">image</span><span>: </span><span style="color:#a3be8c;">flask-docker
+</span><span>    </span><span style="color:#bf616a;">ports</span><span>:
+</span><span>      - &quot;</span><span style="color:#a3be8c;">5000:5000</span><span>&quot;
+</span><span>    </span><span style="color:#bf616a;">environment</span><span>:
+</span><span>      - </span><span style="color:#a3be8c;">FLASK_PORT=5000
+</span><span>  
+</span><span>  </span><span style="color:#bf616a;">db</span><span>:
+</span><span>    </span><span style="color:#bf616a;">image</span><span>: </span><span style="color:#a3be8c;">mysql
+</span><span>    </span><span style="color:#bf616a;">ports</span><span>:
+</span><span>      - &quot;</span><span style="color:#a3be8c;">3306:3306</span><span>&quot;
+</span><span>    </span><span style="color:#bf616a;">environment</span><span>:
+</span><span>      - </span><span style="color:#a3be8c;">MYSQL_ROOT_PASSWORD=Docker@123
+</span><span>      - </span><span style="color:#a3be8c;">MYSQL_DATABASE=docker
+</span><span>      - </span><span style="color:#a3be8c;">MYSQL_USER=docker_user
+</span><span>      - </span><span style="color:#a3be8c;">MYSQL_PASSWORD=Docker@123
+</span></code></pre>
+<p><strong>Note: Different versions of docker-compose has different syntax see <a href="https://docs.docker.com/compose/compose-file/compose-versioning/">here</a>.</strong></p>
+<p>Now to run our setup we just need to run,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">docker-compose</span><span> up</span><span style="color:#bf616a;"> -d
+</span></code></pre>
+<p><code>docker-compose</code> already creates a default network, so we do not need to create another.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Now we have reduced our setup to a single command after installing <code>docker</code> and <code>docker-compose</code>.</p>
+<p>By default, data stored in Docker is written in the writable container layer which no longer exists after the container is destroyed, and it is also difficult to move. For persistent data you should use <a href="https://docs.docker.com/storage/volumes/">volumes</a>.</p>
+<p>You are encouraged to learn more about docker at the <a href="https://docs.docker.com">official docs</a>.</p>
+
+          </div>
+        </article>
+      </div>
+      
+      <div class="column is-2 is-hidden-mobile">
+        <aside class="menu" style="position: sticky; top: 48px">
+          <p class="heading has-text-weight-bold">Contents</p>
+          <ul class="menu-list">
+            
+            <li>
+              <a id="link-what-is-docker" class="toc is-size-7 is-active"
+                href="https://sakshamar.in/posts/introduction-to-docker/#what-is-docker">
+                What is Docker?
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-what-is-a-container" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/introduction-to-docker/#what-is-a-container">
+                What is a Container?
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-what-are-the-advantages-of-docker" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/introduction-to-docker/#what-are-the-advantages-of-docker">
+                What are the advantages of Docker?
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-building-the-application" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/introduction-to-docker/#building-the-application">
+                Building the Application
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-dockerizing-the-application" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/introduction-to-docker/#dockerizing-the-application">
+                Dockerizing the Application
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-networks" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/introduction-to-docker/#networks">
+                Networks
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-docker-compose" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/introduction-to-docker/#docker-compose">
+                Docker-compose
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-conclusion" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/introduction-to-docker/#conclusion">
+                Conclusion
+              </a>
+              
+            </li>
+            
+          </ul>
+        </aside>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+              
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts&#x2F;using-selenium-in-python&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              Using Selenium in Python
+            </a>
+          </div>
+           
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts&#x2F;kubernetes&#x2F;">
+              Deploying Microservices on Kubernetes<span class="icon ml-2">
+                <i class="fas fa-arrow-circle-right"></i>
+              </span>
+            </a>
+          </div>
+          
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-6">
+        <div id="disqus_thread"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+  <footer class="footer py-4">
+    <div class="content has-text-centered">
+      <p>
+        Built with
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-code"></i>
+          </span>
+          <span>code</span>
+        </span>
+        and
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-heart"></i>
+          </span>
+          <span>love</span>
+        </span>
+      </p>
+      <p>
+        Powered by
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-power-off"></i>
+          </span>
+          <span>zola</span>
+        </span>
+      </p>
+    </div>
+  </footer>
+  
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/galleria.min.js" integrity="sha384-QSfwGT8/EU536DKdtyP2D6SLlh8zBaZ0cVkwfrwhqzIU9VCfJT00CLVP5t+HAiYg" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.js" integrity="sha384-DwpKI+deZB267+hPKwiOIc5Y2GKsVL0mR6hgz7GgIu7AgAMYqJwcJKY1YBNfhWcY" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@8.13.5/dist/mermaid.min.js" integrity="sha384-0yWn54pSGtfKCU+skfA69l25VsCw+MZt4LQov3xNRoS7YkAMrFokGgSBnAWSK4pv" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1.1.13/dist/chart.xkcd.min.js" integrity="sha384-xC3h1+IHXK8seA+8KfT79Z4e0GPsznjXBoMa5nd8ooWKplPyXx92NOmljWxLC/cs" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://sakshamar.in/elasticlunr.min.js"></script>
+  <script src="https://sakshamar.in/search_index.en.js"></script><script src="https://sakshamar.in/js/site.js"></script>
+
+  
+
+<script type="text/javascript">
+  const menuBarHeight = document.querySelector("nav.navbar").clientHeight;
+  const tocItems = document.querySelectorAll(".toc");
+  const navSections = new Array(tocItems.length);
+
+  tocItems.forEach((el, i) => {
+    let id = el.getAttribute("id").substring(5);
+    navSections[i] = document.getElementById(id);
+  })
+
+  function isVisible(tocIndex) {
+    const current = navSections[tocIndex];
+    const next = tocIndex < tocItems.length - 1 ? navSections[tocIndex + 1]
+      : document.querySelectorAll("section.section").item(1);
+
+    const c = current.getBoundingClientRect();
+    const n = next.getBoundingClientRect();
+    const h = (window.innerHeight || document.documentElement.clientHeight);
+
+    return (c.top <= h) && (n.top - menuBarHeight >= 0);
+  }
+
+  function activateIfVisible() {
+    for (b = true, i = 0; i < tocItems.length; i++) {
+      if (b && isVisible(i)) {
+        tocItems[i].classList.add('is-active');
+        b = false;
+      } else
+        tocItems[i].classList.remove('is-active');
+    }
+  }
+
+  var isTicking = null;
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      window.requestAnimationFrame(() => {
+        activateIfVisible();
+        isTicking = false;
+      });
+      isTicking = true;
+    }
+  }, false);
+</script>
+
+
+
+<script>
+  var disqus_config = function () {
+    this.page.url = "https://sakshamar.in";
+    this.page.identifier = "/posts/introduction-to-docker/";
+  };
+
+  (function () {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://sakshamar.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+
+
+
+  
+  
+</body>
+
+</html>
