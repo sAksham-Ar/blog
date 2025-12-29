@@ -13,7 +13,7 @@ comments = true
 
 # Introduction
 
-Have you ever wondered what happens when you convert a `NAN` in Golang to an `uint64`? I always assumed it would be a big garbage value or 0, but the actual value shocked me.
+Have you ever wondered what happens when you convert a `NAN` in Golang to an `uint64`? I always assumed it would be a big garbage value or 0, but after debugging a production bug for 1 day occuring seeming randomly, I found out the result is suprising.
 
 # The Program
 
@@ -50,7 +50,7 @@ And the output is:
 
 As some people may have guessed, the difference between the two machines is CPU architure. My laptop runs on x86 while the vm runs on ARM64.
 
-I found [this](https://stackoverflow.com/questions/70425809/why-is-uint64-of-nan-and-maxfloat64-equal-in-golang) excellent stack overflow which explains the difference. Essentially, Golang just runs the hardware instruction required for converting `NAN` to `uint` and the value is depended on the CPU architecture.
+I found [this](https://stackoverflow.com/questions/70425809/why-is-uint64-of-nan-and-maxfloat64-equal-in-golang) excellent stack overflow which explains the difference. Essentially, Golang just runs the hardware instruction required for converting `NAN` to `uint` and the value is depended on the CPU architecture. On x86, `CVTTSD2SI` is run which raises an exception which is masked by golang due to which `0x8000000000000000` (i.e. `9223372036854775808`) is returned. On Arm64, `FCVTZS` is run which returns 0 for NAN.
 
 # How do other languages fare? 
 
