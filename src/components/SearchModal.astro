@@ -1,0 +1,118 @@
+---
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const searchData = allPosts.map((post) => ({
+  title: post.data.title,
+  slug: post.id.replace(/\.mdx?$/, ''),
+  description: post.data.description || '',
+  category: post.data.category,
+  date: post.data.date.toISOString().split('T')[0],
+}));
+---
+
+<div
+  id="search-modal"
+  class="fixed inset-0 z-100 hidden bg-slate-900/60 backdrop-blur-sm p-4 sm:p-6 md:p-20 flex justify-center items-start overflow-y-auto"
+>
+  <div
+    class="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transform transition-all"
+    onclick="event.stopPropagation()"
+  >
+    <!-- Search Input Bar -->
+    <div class="flex items-center px-4 py-3 border-b border-slate-200 dark:border-slate-800">
+      <svg class="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input
+        id="search-input"
+        type="text"
+        placeholder="Type to search articles, topics, tech..."
+        class="w-full bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden text-base"
+        autocomplete="off"
+      />
+      <button
+        id="close-search-btn"
+        class="px-2 py-1 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-800 rounded-md"
+      >
+        ESC
+      </button>
+    </div>
+
+    <!-- Search Results Container -->
+    <div id="search-results" class="max-h-96 overflow-y-auto p-4 space-y-2">
+      <p class="text-xs text-slate-400 text-center py-4">Type something to search...</p>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ searchData }}>
+  const searchModal = document.getElementById('search-modal');
+  const searchInput = document.getElementById('search-input');
+  const searchResults = document.getElementById('search-results');
+  const searchBtn = document.getElementById('search-btn');
+  const closeBtn = document.getElementById('close-search-btn');
+
+  function openSearch() {
+    searchModal?.classList.remove('hidden');
+    searchInput?.focus();
+  }
+
+  function closeSearch() {
+    searchModal?.classList.add('hidden');
+    if (searchInput) searchInput.value = '';
+    renderResults([]);
+  }
+
+  searchBtn?.addEventListener('click', openSearch);
+  closeBtn?.addEventListener('click', closeSearch);
+  searchModal?.addEventListener('click', closeSearch);
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      if (searchModal?.classList.contains('hidden')) {
+        openSearch();
+      } else {
+        closeSearch();
+      }
+    }
+    if (e.key === 'Escape' && !searchModal?.classList.contains('hidden')) {
+      closeSearch();
+    }
+  });
+
+  function renderResults(results) {
+    if (!searchResults) return;
+    if (results.length === 0) {
+      if (searchInput && searchInput.value.trim() !== '') {
+        searchResults.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No articles found matching "${searchInput.value}"</p>`;
+      } else {
+        searchResults.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Type to search across all ${searchData.length} articles...</p>`;
+      }
+      return;
+    }
+
+    searchResults.innerHTML = results.map(item => `
+      <a href="/posts/${item.slug}" class="block p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group">
+        <div class="flex items-center justify-between gap-2">
+          <h4 class="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">${item.title}</h4>
+          <span class="px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400">${item.category}</span>
+        </div>
+        ${item.description ? `<p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-1">${item.description}</p>` : ''}
+      </a>
+    `).join('');
+  }
+
+  searchInput?.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    if (!query) {
+      renderResults([]);
+      return;
+    }
+    const filtered = searchData.filter(item =>
+      item.title.toLowerCase().includes(query) ||
+      item.description.toLowerCase().includes(query) ||
+      item.category.toLowerCase().includes(query)
+    );
+    renderResults(filtered);
+  });
+</script>

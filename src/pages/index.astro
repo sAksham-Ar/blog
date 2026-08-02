@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import PostCard from '../components/PostCard.astro';
+
+const rawPosts = await getCollection('posts', ({ data }) => !data.draft);
+
+const allPosts = rawPosts.map((p) => ({
+  ...p,
+  slug: p.id.replace(/\.mdx?$/, ''),
+}));
+
+// Sort posts by date descending
+allPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<BaseLayout>
+  <!-- Hero Section -->
+  <Hero />
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+    <!-- All Recent Posts Grid -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+          Recent Articles
+        </h2>
+        <a href="/posts" class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+          View all posts &rarr;
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {allPosts.slice(0, 9).map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
+
+      {allPosts.length > 9 && (
+        <div class="text-center pt-6">
+          <a
+            href="/posts"
+            class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-700 transition-all"
+          >
+            View All {allPosts.length} Articles
+          </a>
+        </div>
+      )}
+    </section>
+  </div>
+</BaseLayout>

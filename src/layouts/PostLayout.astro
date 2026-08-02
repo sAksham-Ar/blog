@@ -1,0 +1,137 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import GiscusComments from '../components/GiscusComments.astro';
+
+interface Props {
+  post: {
+    slug: string;
+    body: string;
+    data: {
+      title: string;
+      date: Date;
+      description?: string;
+      category: string;
+      tags: string[];
+      toc?: boolean;
+    };
+  };
+  headings: {
+    depth: number;
+    slug: string;
+    text: string;
+  }[];
+}
+
+const { post, headings } = Astro.props;
+
+// Calculate reading time
+const wordCount = post.body.trim().split(/\s+/).length;
+const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+// Format date
+const formattedDate = new Date(post.data.date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={`${post.data.title} | Saksham Arya`} description={post.data.description}>
+  <!-- Top Reading Progress Indicator -->
+  <div id="reading-progress"></div>
+
+  <article class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb & Category -->
+    <div class="mb-6 flex flex-wrap items-center gap-2 text-xs font-semibold">
+      <a href="/posts" class="text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400">Posts</a>
+      <span class="text-slate-300 dark:text-slate-700">/</span>
+      <a href={`/categories/${post.data.category.toLowerCase()}`} class="px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+        {post.data.category}
+      </a>
+    </div>
+
+    <!-- Header Section -->
+    <header class="mb-12 max-w-4xl space-y-4">
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+        {post.data.title}
+      </h1>
+
+      {post.data.description && (
+        <p class="text-slate-600 dark:text-slate-300 text-lg sm:text-xl leading-relaxed font-light">
+          {post.data.description}
+        </p>
+      )}
+
+      <!-- Meta stats (Author, Date, Reading time) -->
+      <div class="pt-4 flex flex-wrap items-center gap-6 text-sm text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 pb-8">
+        <div class="flex items-center gap-3">
+          <img src="/assets/saksham.jpg" alt="Saksham Arya" class="w-9 h-9 rounded-full border border-slate-200 dark:border-slate-700 object-cover" />
+          <span class="font-medium text-slate-900 dark:text-slate-200">Saksham Arya</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <time datetime={post.data.date.toISOString()}>{formattedDate}</time>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>{readingTime} min read</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Body + TOC Sidebar Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+      <!-- Article Prose Content -->
+      <div class="lg:col-span-3 min-w-0">
+        <div class="prose dark:prose-invert max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-2xl prose-img:shadow-lg">
+          <slot />
+        </div>
+
+        <!-- Comments -->
+        <GiscusComments />
+      </div>
+
+      <!-- Sticky TOC Sidebar -->
+      <aside class="hidden lg:block lg:col-span-1">
+        <div class="sticky top-24 space-y-6">
+          <TableOfContents headings={headings} />
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  <!-- Script for Reading Progress Bar & Copy Code Buttons -->
+  <script is:inline>
+    // Update Reading Progress Bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      const progressBar = document.getElementById('reading-progress');
+      if (progressBar) progressBar.style.width = scrolled + '%';
+    });
+
+    // Add Copy Button to code blocks
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('pre').forEach((block) => {
+        if (block.querySelector('.copy-code-btn')) return;
+        const button = document.createElement('button');
+        button.className = 'copy-code-btn';
+        button.innerText = 'Copy';
+        
+        button.addEventListener('click', async () => {
+          const code = block.querySelector('code');
+          const text = code ? code.innerText : block.innerText;
+          await navigator.clipboard.writeText(text);
+          button.innerText = 'Copied!';
+          setTimeout(() => {
+            button.innerText = 'Copy';
+          }, 2000);
+        });
+
+        block.appendChild(button);
+      });
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 - Page Not Found | Saksham Arya">
+  <div class="max-w-2xl mx-auto px-4 py-24 text-center space-y-6">
+    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 font-mono text-3xl font-bold border border-blue-500/20">
+      404
+    </div>
+    <h1 class="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+      Page Not Found
+    </h1>
+    <p class="text-slate-600 dark:text-slate-400 text-base">
+      Oops! The page or article you are looking for might have been moved or renamed.
+    </p>
+    <div>
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition-all"
+      >
+        &larr; Back to Home
+      </a>
+    </div>
+  </div>
+</BaseLayout>
