@@ -1,24 +1,32 @@
 ---
+// To activate Giscus comments:
+// 1. Enable Discussions at https://github.com/sAksham-Ar/blog/settings
+// 2. Install Giscus app from https://giscus.app
+// 3. Paste repoId and categoryId below
+const repoId = import.meta.env.PUBLIC_GISCUS_REPO_ID || '';
+const categoryId = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID || '';
+const repo = 'sAksham-Ar/blog';
 ---
 
-<div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800">
-  <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6">Discussion & Comments</h3>
-  <div id="giscus-container" class="min-h-[200px]">
-    <!-- Giscus Embed -->
-    <script src="https://giscus.app/client.js"
-        data-repo="sAksham-Ar/blog"
-        data-repo-id=""
-        data-category="Announcements"
-        data-category-id=""
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="preferred_color_scheme"
-        data-lang="en"
-        crossorigin="anonymous"
-        async>
-    </script>
+{repoId ? (
+  <div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800">
+    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6">Discussion & Comments</h3>
+    <div id="giscus-container" class="min-h-[200px]">
+      <script src="https://giscus.app/client.js"
+          data-repo={repo}
+          data-repo-id={repoId}
+          data-category="Announcements"
+          data-category-id={categoryId}
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="preferred_color_scheme"
+          data-lang="en"
+          crossorigin="anonymous"
+          async>
+      </script>
+    </div>
   </div>
-</div>
+) : null}
