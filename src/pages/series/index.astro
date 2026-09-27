@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+
+const seriesList = [
+  {
+    slug: 'cpp',
+    name: 'C++ Fundamentals',
+    title: 'C++ Programming Series',
+    description:
+      'A comprehensive step-by-step curriculum taking you from "Hello World" to pointers, structures, dynamic memory, and linked lists.',
+    level: 'Beginner to Intermediate',
+    match: (p: any) => p.data.series === 'C++ Fundamentals' || p.data.category === 'C++',
+  },
+  {
+    slug: 'cloud',
+    name: 'Cloud & Microservices',
+    title: 'Cloud & Microservices Series',
+    description:
+      'Production-grade guides and architectural insights on Docker containers, Kubernetes clusters, and RabbitMQ message brokers.',
+    level: 'Intermediate to Advanced',
+    match: (p: any) => p.data.series === 'Cloud & Microservices',
+  },
+];
+
+const seriesData = seriesList.map((series) => {
+  const posts = allPosts.filter(series.match);
+  return {
+    ...series,
+    count: posts.length,
+  };
+});
+---
+
+<BaseLayout
+  title="Tutorial Series | Saksham Arya"
+  description="Explore multi-part deep-dive tutorial series on C++, Cloud Infrastructure, and Software Engineering."
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+    <div class="space-y-3 text-center sm:text-left">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+        <span>Curated Learning Tracks</span>
+      </div>
+      <h1 class="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+        Tutorial Series
+      </h1>
+      <p class="text-slate-600 dark:text-slate-400 text-lg max-w-2xl">
+        Deep-dive multi-part learning tracks designed to guide you through topics sequentially from basics to advanced implementations.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {seriesData.map((series) => (
+        <a
+          href={`/series/${series.slug}`}
+          class="group p-8 bg-white dark:bg-slate-800/60 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 hover:border-blue-500/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 text-xs font-semibold rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                {series.level}
+              </span>
+              <span class="text-xs font-bold text-slate-500 dark:text-slate-400 font-mono">
+                {series.count} {series.count === 1 ? 'lesson' : 'lessons'}
+              </span>
+            </div>
+
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              {series.title}
+            </h2>
+
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              {series.description}
+            </p>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-sm font-semibold text-blue-600 dark:text-blue-400">
+            <span>Explore Series Curriculum</span>
+            <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

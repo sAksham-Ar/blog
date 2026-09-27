@@ -7,6 +7,7 @@ const searchData = allPosts.map((post) => ({
   slug: post.id.replace(/\.mdx?$/, ''),
   description: post.data.description || '',
   category: post.data.category,
+  series: post.data.series || '',
   date: post.data.date.toISOString().split('T')[0],
 }));
 ---
@@ -25,7 +26,7 @@ const searchData = allPosts.map((post) => ({
       <input
         id="search-input"
         type="text"
-        placeholder="Type to search articles, topics, tech..."
+        placeholder="Type to search articles, series, topics, tech..."
         class="w-full bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden text-base"
         autocomplete="off"
       />
@@ -95,7 +96,10 @@ const searchData = allPosts.map((post) => ({
       <a href="/posts/${item.slug}" class="block p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group">
         <div class="flex items-center justify-between gap-2">
           <h4 class="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">${item.title}</h4>
-          <span class="px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400">${item.category}</span>
+          <div class="flex items-center gap-1.5 shrink-0">
+            ${item.series ? `<span class="px-2 py-0.5 text-[10px] font-medium rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400">${item.series}</span>` : ''}
+            <span class="px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400">${item.category}</span>
+          </div>
         </div>
         ${item.description ? `<p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-1">${item.description}</p>` : ''}
       </a>
@@ -111,7 +115,8 @@ const searchData = allPosts.map((post) => ({
     const filtered = searchData.filter(item =>
       item.title.toLowerCase().includes(query) ||
       item.description.toLowerCase().includes(query) ||
-      item.category.toLowerCase().includes(query)
+      item.category.toLowerCase().includes(query) ||
+      item.series.toLowerCase().includes(query)
     );
     renderResults(filtered);
   });

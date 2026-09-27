@@ -1,0 +1,205 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+
+  const seriesConfigs = [
+    {
+      slug: 'cpp',
+      name: 'C++ Fundamentals',
+      title: 'C++ Programming Series',
+      subtitle: 'Complete 20-Lesson Curriculum from Basics to Data Structures',
+      description:
+        'A comprehensive, step-by-step tutorial series covering C++ fundamentals. Learn syntax, control flow, functions, memory pointers, dynamic memory allocation, and data structures with practical code examples.',
+      badge: 'C++ Series',
+      level: 'Beginner to Intermediate',
+      category: 'C++',
+      match: (p: any) => p.data.series === 'C++ Fundamentals' || p.data.category === 'C++',
+    },
+    {
+      slug: 'cloud',
+      name: 'Cloud & Microservices',
+      title: 'Cloud & Microservices Series',
+      subtitle: 'Practical Guides to Modern Infrastructure & Distributed Systems',
+      description:
+        'In-depth engineering notes on containerization, container orchestration, and message brokers with Docker, Kubernetes, and RabbitMQ.',
+      badge: 'DevOps & Cloud',
+      level: 'Intermediate to Advanced',
+      category: 'DevOps',
+      match: (p: any) => p.data.series === 'Cloud & Microservices',
+    },
+  ];
+
+  return seriesConfigs.map((config) => {
+    const rawSeriesPosts = allPosts.filter(config.match);
+    const posts = rawSeriesPosts
+      .map((p) => {
+        const wordCount = p.body ? p.body.trim().split(/\s+/).length : 100;
+        const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+        return {
+          ...p,
+          slug: p.id.replace(/\.mdx?$/, ''),
+          readingTime,
+        };
+      })
+      // Sort chronologically for tutorial series learning order
+      .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+
+    return {
+      params: { series: config.slug },
+      props: {
+        seriesConfig: config,
+        posts,
+      },
+    };
+  });
+}
+
+interface Props {
+  seriesConfig: {
+    slug: string;
+    name: string;
+    title: string;
+    subtitle: string;
+    description: string;
+    badge: string;
+    level: string;
+    category: string;
+  };
+  posts: Array<{
+    id: string;
+    slug: string;
+    readingTime: number;
+    data: {
+      title: string;
+      date: Date;
+      description?: string;
+      category: string;
+      tags: string[];
+      series?: string;
+    };
+  }>;
+}
+
+const { seriesConfig, posts } = Astro.props;
+
+const totalReadingTime = posts.reduce((acc, p) => acc + p.readingTime, 0);
+---
+
+<BaseLayout
+  title={`${seriesConfig.title} | Saksham Arya`}
+  description={seriesConfig.description}
+>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+    <!-- Series Header Hero Banner -->
+    <header class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900/20 via-indigo-900/10 to-purple-900/20 dark:from-blue-950/40 dark:via-indigo-950/30 dark:to-purple-950/40 border border-blue-500/20 dark:border-blue-500/10 p-8 sm:p-12 shadow-sm">
+      <div class="space-y-4 max-w-3xl">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+          <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/series" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Series</a>
+          <span>/</span>
+          <span class="text-blue-600 dark:text-blue-400">{seriesConfig.name}</span>
+        </nav>
+
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+          <span>{seriesConfig.badge}</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          {seriesConfig.title}
+        </h1>
+
+        <p class="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
+          {seriesConfig.description}
+        </p>
+
+        <!-- Stats Chips -->
+        <div class="flex flex-wrap items-center gap-4 pt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80">
+            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.5L19 7.5V19a2 2 0 01-2 2z" /></svg>
+            <span class="font-bold text-slate-900 dark:text-white">{posts.length}</span> Lessons
+          </div>
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80">
+            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>~<strong class="font-bold text-slate-900 dark:text-white">{totalReadingTime}</strong> min total</span>
+          </div>
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80">
+            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            <span>Level: <strong class="font-bold text-slate-900 dark:text-white">{seriesConfig.level}</strong></span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Series Learning Path / Table of Contents -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+            Curriculum & Lessons
+          </h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400">
+            Follow the series sequentially from Part 1 to master the concepts step-by-step.
+          </p>
+        </div>
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+          Chronological Order
+        </span>
+      </div>
+
+      <!-- Lessons Grid / Timeline -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {posts.map((post, idx) => {
+          const partNum = idx + 1;
+          const formattedPart = partNum < 10 ? `0${partNum}` : `${partNum}`;
+          const formattedDate = new Date(post.data.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          });
+
+          return (
+            <a
+              href={`/posts/${post.slug}`}
+              class="group relative flex flex-col justify-between p-5 bg-white dark:bg-slate-800/60 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 hover:border-blue-500/50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+            >
+              <div class="space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200/60 dark:border-blue-800/40">
+                    PART {formattedPart}
+                  </span>
+                  <div class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>{post.readingTime} min</span>
+                  </div>
+                </div>
+
+                <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+                  {post.data.title}
+                </h3>
+
+                {post.data.description && (
+                  <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                    {post.data.description}
+                  </p>
+                )}
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-xs text-slate-400 dark:text-slate-500">
+                <time datetime={post.data.date.toISOString()}>{formattedDate}</time>
+                <span class="font-medium text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                  Read Lesson &rarr;
+                </span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

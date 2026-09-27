@@ -3,19 +3,69 @@ import { getCollection, render } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts');
-  return posts
-    .filter((post) => post.id && post.id !== 'index')
-    .map((post) => ({
-      params: { slug: post.id.replace(/\.mdx?$/, '') },
-      props: { post },
-    }));
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  const validPosts = posts.filter((post) => post.id && post.id !== 'index');
+
+  return validPosts.map((post) => {
+    const slug = post.id.replace(/\.mdx?$/, '');
+    
+    // Check if post belongs to a series
+    let seriesInfo = null;
+    if (post.data.series) {
+      const seriesPosts = validPosts
+        .filter((p) => p.data.series === post.data.series)
+        .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime())
+        .map((p) => ({
+          slug: p.id.replace(/\.mdx?$/, ''),
+          title: p.data.title,
+          date: p.data.date,
+        }));
+
+      const currentIndex = seriesPosts.findIndex((p) => p.slug === slug);
+      if (currentIndex !== -1) {
+        seriesInfo = {
+          name: post.data.series,
+          slug: post.data.series.toLowerCase().includes('c++') ? 'cpp' : 'cloud',
+          currentPart: currentIndex + 1,
+          totalParts: seriesPosts.length,
+          posts: seriesPosts,
+          prevPost: currentIndex > 0 ? seriesPosts[currentIndex - 1] : null,
+          nextPost: currentIndex < seriesPosts.length - 1 ? seriesPosts[currentIndex + 1] : null,
+        };
+      }
+    }
+
+    return {
+      params: { slug },
+      props: {
+        post,
+        seriesInfo,
+      },
+    };
+  });
 }
 
-const { post } = Astro.props;
+interface Props {
+  post: any;
+  seriesInfo: {
+    name: string;
+    slug: string;
+    currentPart: number;
+    totalParts: number;
+    posts: Array<{ slug: string; title: string; date: Date }>;
+    prevPost: { slug: string; title: string } | null;
+    nextPost: { slug: string; title: string } | null;
+  } | null;
+}
+
+const { post, seriesInfo } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
-<PostLayout post={{ ...post, slug: post.id.replace(/\.mdx?$/, '') }} headings={headings}>
+<PostLayout
+  post={{ ...post, slug: post.id.replace(/\.mdx?$/, '') }}
+  headings={headings}
+  seriesInfo={seriesInfo}
+>
   <Content />
 </PostLayout>
