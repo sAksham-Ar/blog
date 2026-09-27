@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.css" integrity="sha384-+rY0QD+LRnTOquDMzGa9lXU6jIwdiQuwCJQ2cdcW0qeP/0UbjQCZlXnRsUMA+9pH" crossorigin="anonymous">
+  
+
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.1/css/academicons.min.css" integrity="sha384-FIue+PI4SsI9XfHCz8dBLg33b0c1fMJgNU3X//L26FYbGnlSEfWmNT7zgWc2N9b6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link href="https://sakshamar.in/deep-thought.css" rel="stylesheet" />
+  
+  
+
+  <title>
+    
+ | Deploying Microservices on Kubernetes
+
+  </title>
+
+  
+  
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mathtex-script-type.min.js" integrity="sha384-jiBVvJ8NGGj5n7kJaiWwWp9AjC+Yh8rhZY3GtAX8yU28azcLgoRo4oukO87g7zDT" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item is-size-5 has-text-weight-bold" href="https:&#x2F;&#x2F;sakshamar.in"></a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;categories">
+            Categories
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            Deploying Microservices on Kubernetes
+          </h1>
+          <p class="subtitle">This blog describes how I deployed microservices on Kubernetes for the OpenSoft event.</p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>sAksham-Ar published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2022-03-24">March 24, 2022</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>3 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>507 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://sakshamar.in/categories/kubernetes/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>Kubernetes</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <h2 id="introduction">Introduction</h2>
+<p>This Year's Opensoft Problem Statement was very interesting from a DevOps perspective. Basically, we had to convert a Monolithic Application to Microservices, Dockerize the microservices and then deploy them on Kubernetes.</p>
+<h2 id="initial-set-up">Initial Set-up</h2>
+<p>We choose Google Kubernetes Engine for hosting because of their very good free trial($300 in credits for first three months). Using local docker images would have been very time-consuming as we had to make sure they were present on all the nodes, I decided to push my images to GitHub Container Registry.</p>
+<p>Firstly, creating a Personal Access Token on GitHub and logging in on GHCR from docker,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#b48ead;">export </span><span style="color:#bf616a;">CR_PAT</span><span>=</span><span style="color:#a3be8c;">YOUR_TOKEN
+</span><span style="color:#96b5b4;">echo </span><span>$</span><span style="color:#bf616a;">CR_PAT </span><span>| </span><span style="color:#bf616a;">docker</span><span> login ghcr.io</span><span style="color:#bf616a;"> -u</span><span> USERNAME</span><span style="color:#bf616a;"> --password-stdin
+</span></code></pre>
+<p>Then tagging and pushing the image on ghcr,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">docker</span><span> tag image_name ghcr.io/github_username/image_name
+</span><span style="color:#bf616a;">docker</span><span> push ghcr.io/github_username/image_name
+</span></code></pre>
+<p>Then, I created a cluster on GKE. I also downloaded the <code>google-cloud-sdk</code> and authorized it so that I could control the remote cluster using the <code>kubectl</code> command on my system,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">gcloud</span><span> auth
+</span><span style="color:#bf616a;">gcloud</span><span> container clusters get-credentials cluster_name</span><span style="color:#bf616a;"> --zone</span><span> zone_name</span><span style="color:#bf616a;"> --project</span><span> project_name
+</span></code></pre>
+<p>Creating a secret to pull images from ghcr,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">kubectl</span><span> create secret docker-registry github-secret</span><span style="color:#bf616a;"> --docker-server</span><span>=https://ghcr.io</span><span style="color:#bf616a;"> --docker-username</span><span>=github_username</span><span style="color:#bf616a;"> --docker-password</span><span>=github_pat</span><span style="color:#bf616a;"> --docker-email</span><span>=github_email
+</span></code></pre>
+<h2 id="deploying-a-microservice">Deploying a MicroService</h2>
+<p>Firstly, we created the deployment of the database for the microservice. Here we are using Postgres,</p>
+<pre data-lang="yaml" style="background-color:#2b303b;color:#c0c5ce;" class="language-yaml "><code class="language-yaml" data-lang="yaml"><span style="color:#bf616a;">apiVersion</span><span>: </span><span style="color:#a3be8c;">apps/v1
+</span><span style="color:#bf616a;">kind</span><span>: </span><span style="color:#a3be8c;">Deployment
+</span><span style="color:#bf616a;">metadata</span><span>:
+</span><span>  </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-db-deployment
+</span><span>  </span><span style="color:#bf616a;">labels</span><span>:
+</span><span>    </span><span style="color:#bf616a;">type</span><span>: </span><span style="color:#a3be8c;">essential
+</span><span style="color:#bf616a;">spec</span><span>:
+</span><span>  </span><span style="color:#bf616a;">selector</span><span>:
+</span><span>    </span><span style="color:#bf616a;">matchLabels</span><span>:
+</span><span>      </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-db
+</span><span>  </span><span style="color:#bf616a;">replicas</span><span>: </span><span style="color:#d08770;">1
+</span><span>  </span><span style="color:#bf616a;">template</span><span>:
+</span><span>    </span><span style="color:#bf616a;">metadata</span><span>:
+</span><span>      </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-db-pod
+</span><span>      </span><span style="color:#bf616a;">labels</span><span>:
+</span><span>        </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-db
+</span><span>    </span><span style="color:#bf616a;">spec</span><span>:
+</span><span>      </span><span style="color:#bf616a;">containers</span><span>: 
+</span><span>      - </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-db-container
+</span><span>        </span><span style="color:#bf616a;">image</span><span>: </span><span style="color:#a3be8c;">postgres
+</span><span>        </span><span style="color:#bf616a;">env</span><span>:
+</span><span>        - </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">POSTGRES_USER
+</span><span>          </span><span style="color:#bf616a;">value</span><span>: </span><span style="color:#a3be8c;">restaurant
+</span><span>        - </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">POSTGRES_PASSWORD
+</span><span>          </span><span style="color:#bf616a;">value</span><span>: </span><span style="color:#a3be8c;">restaurant
+</span><span>        - </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">POSTGRES_DB
+</span><span>          </span><span style="color:#bf616a;">value</span><span>: </span><span style="color:#a3be8c;">restaurant
+</span><span>        </span><span style="color:#bf616a;">volumeMounts</span><span>:
+</span><span>            - </span><span style="color:#bf616a;">mountPath</span><span>: </span><span style="color:#a3be8c;">/var/lib/postgresql/data
+</span><span>              </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">postgredb
+</span><span>              </span><span style="color:#bf616a;">subPath</span><span>: </span><span style="color:#a3be8c;">postgres
+</span><span>      </span><span style="color:#bf616a;">volumes</span><span>:
+</span><span>        - </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">postgredb
+</span><span>          </span><span style="color:#bf616a;">persistentVolumeClaim</span><span>:
+</span><span>            </span><span style="color:#bf616a;">claimName</span><span>: </span><span style="color:#a3be8c;">restaurant-db-pvc
+</span></code></pre>
+<p><strong>Note: without <code>subPath</code> the pod does not start. (<a href="https://stackoverflow.com/questions/51168558/how-to-mount-a-postgresql-volume-using-aws-ebs-in-kubernete">see here for more details.</a>)</strong></p>
+<p>As we want our database data to persist, we need to create a Persistent Volume Claim.</p>
+<pre data-lang="yaml" style="background-color:#2b303b;color:#c0c5ce;" class="language-yaml "><code class="language-yaml" data-lang="yaml"><span style="color:#bf616a;">apiVersion</span><span>: </span><span style="color:#a3be8c;">v1
+</span><span style="color:#bf616a;">kind</span><span>: </span><span style="color:#a3be8c;">PersistentVolumeClaim
+</span><span style="color:#bf616a;">metadata</span><span>:
+</span><span>  </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-db-pvc
+</span><span style="color:#bf616a;">spec</span><span>:
+</span><span>  </span><span style="color:#bf616a;">accessModes</span><span>:
+</span><span>    - </span><span style="color:#a3be8c;">ReadWriteOnce
+</span><span>  </span><span style="color:#bf616a;">resources</span><span>:
+</span><span>    </span><span style="color:#bf616a;">requests</span><span>:
+</span><span>      </span><span style="color:#bf616a;">storage</span><span>: </span><span style="color:#a3be8c;">1Gi
+</span></code></pre>
+<p>We do not need to create a Persistent Volume as GKE automatically provisions a Persistent Volume when a PVC is bound.</p>
+<p>For the microservice we first create the config map,</p>
+<pre data-lang="yaml" style="background-color:#2b303b;color:#c0c5ce;" class="language-yaml "><code class="language-yaml" data-lang="yaml"><span style="color:#bf616a;">apiVersion</span><span>: </span><span style="color:#a3be8c;">v1
+</span><span style="color:#bf616a;">kind</span><span>: </span><span style="color:#a3be8c;">ConfigMap
+</span><span style="color:#bf616a;">metadata</span><span>:
+</span><span>  </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-config
+</span><span style="color:#bf616a;">data</span><span>:
+</span><span>  </span><span style="color:#bf616a;">DJANGO_SECRET_KEY</span><span>: </span><span style="color:#a3be8c;">XXXXX
+</span><span>  </span><span style="color:#bf616a;">DJANGO_DEBUG</span><span>: &quot;</span><span style="color:#a3be8c;">True</span><span>&quot;
+</span><span>  </span><span style="color:#bf616a;">RABBITMQ_URL</span><span>: </span><span style="color:#a3be8c;">XXXXX
+</span><span>  </span><span style="color:#bf616a;">IS_DEPLOYED</span><span>: &quot;</span><span style="color:#a3be8c;">True</span><span>&quot;
+</span><span>  </span><span style="color:#bf616a;">PORT</span><span>: &quot;</span><span style="color:#a3be8c;">8000</span><span>&quot;
+</span><span>  </span><span style="color:#bf616a;">DATABASE_URL</span><span>: </span><span style="color:#a3be8c;">postgres://restaurant:restaurant@restaurant-db/restaurant
+</span></code></pre>
+<p>We are using RabbitMQ to keep our databases in sync, read more <a href="https://sakshamar.in/posts/rabbitmq/">here.</a></p>
+<p>After the Config Map, we create the deployment for the microservice,</p>
+<pre data-lang="yaml" style="background-color:#2b303b;color:#c0c5ce;" class="language-yaml "><code class="language-yaml" data-lang="yaml"><span style="color:#bf616a;">apiVersion</span><span>: </span><span style="color:#a3be8c;">apps/v1
+</span><span style="color:#bf616a;">kind</span><span>: </span><span style="color:#a3be8c;">Deployment
+</span><span style="color:#bf616a;">metadata</span><span>:
+</span><span>  </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-ms-deployment
+</span><span>  </span><span style="color:#bf616a;">labels</span><span>:
+</span><span>    </span><span style="color:#bf616a;">type</span><span>: </span><span style="color:#a3be8c;">essential
+</span><span style="color:#bf616a;">spec</span><span>:
+</span><span>  </span><span style="color:#bf616a;">selector</span><span>:
+</span><span>    </span><span style="color:#bf616a;">matchLabels</span><span>:
+</span><span>      </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-ms
+</span><span>  </span><span style="color:#bf616a;">replicas</span><span>: </span><span style="color:#d08770;">3
+</span><span>  </span><span style="color:#bf616a;">template</span><span>:
+</span><span>    </span><span style="color:#bf616a;">metadata</span><span>:
+</span><span>      </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-ms-pod
+</span><span>      </span><span style="color:#bf616a;">labels</span><span>:
+</span><span>        </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-ms
+</span><span>    </span><span style="color:#bf616a;">spec</span><span>:
+</span><span>      </span><span style="color:#bf616a;">containers</span><span>:
+</span><span>      - </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-ms-container
+</span><span>        </span><span style="color:#bf616a;">image</span><span>: </span><span style="color:#a3be8c;">ghcr.io/saksham-ar/restaurant-ms:v2
+</span><span>        </span><span style="color:#bf616a;">command</span><span>: [&quot;</span><span style="color:#a3be8c;">/bin/sh</span><span>&quot;,&quot;</span><span style="color:#a3be8c;">-c</span><span>&quot;]
+</span><span>        </span><span style="color:#bf616a;">args</span><span>: [&quot;</span><span style="color:#a3be8c;">python manage.py migrate &amp;&amp;
+</span><span style="color:#a3be8c;">          python manage.py collectstatic --noinput &amp;&amp;
+</span><span style="color:#a3be8c;">          python manage.py runserver 0.0.0.0:8000</span><span>&quot;]
+</span><span>        </span><span style="color:#bf616a;">envFrom</span><span>:
+</span><span>          - </span><span style="color:#bf616a;">configMapRef</span><span>:
+</span><span>              </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-config
+</span><span>      </span><span style="color:#bf616a;">imagePullSecrets</span><span>:
+</span><span>        - </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">github-secret
+</span></code></pre>
+<h2 id="creating-services">Creating Services</h2>
+<p>Till this point, we have written the deployment files but, there is no way for the microservice deployment to access the database. For this we create a service <code>ClusterIp</code>,</p>
+<pre data-lang="yaml" style="background-color:#2b303b;color:#c0c5ce;" class="language-yaml "><code class="language-yaml" data-lang="yaml"><span style="color:#bf616a;">apiVersion</span><span>: </span><span style="color:#a3be8c;">v1
+</span><span style="color:#bf616a;">kind</span><span>: </span><span style="color:#a3be8c;">Service
+</span><span style="color:#bf616a;">metadata</span><span>:
+</span><span>  </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-db
+</span><span>  </span><span style="color:#bf616a;">labels</span><span>:
+</span><span>    </span><span style="color:#bf616a;">app</span><span>: </span><span style="color:#a3be8c;">restaurant-ms
+</span><span style="color:#bf616a;">spec</span><span>:
+</span><span>  </span><span style="color:#bf616a;">selector</span><span>:
+</span><span>    </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-db
+</span><span>  </span><span style="color:#bf616a;">ports</span><span>:
+</span><span>    - </span><span style="color:#bf616a;">port</span><span>: </span><span style="color:#d08770;">5432
+</span><span>      </span><span style="color:#bf616a;">targetPort</span><span>: </span><span style="color:#d08770;">5432
+</span></code></pre>
+<p>This microservice will access this through the <code>DATABASE_URL</code> we have given in the Config Map of the microservice. Now starting the microservice with,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">kubectl</span><span> create</span><span style="color:#bf616a;"> -f</span><span> restaurant-config.yml
+</span><span style="color:#bf616a;">kubectl</span><span> create</span><span style="color:#bf616a;"> -f</span><span> restaurant-db-pvc.yml
+</span><span style="color:#bf616a;">kubectl</span><span> create</span><span style="color:#bf616a;"> -f</span><span> restaurant-db-deploy.yml
+</span><span style="color:#bf616a;">kubectl</span><span> create</span><span style="color:#bf616a;"> -f</span><span> restaurant-db-service.yml
+</span><span style="color:#bf616a;">kubectl</span><span> create</span><span style="color:#bf616a;"> -f</span><span> restaurant-deploy.yml
+</span></code></pre>
+<p>Now to make the microservice accessible on a port on the nodes we create a <code>NodePort</code> microservice,</p>
+<pre data-lang="yaml" style="background-color:#2b303b;color:#c0c5ce;" class="language-yaml "><code class="language-yaml" data-lang="yaml"><span style="color:#bf616a;">apiVersion</span><span>: </span><span style="color:#a3be8c;">v1
+</span><span style="color:#bf616a;">kind</span><span>: </span><span style="color:#a3be8c;">Service
+</span><span style="color:#bf616a;">metadata</span><span>:
+</span><span>  </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-ms-service
+</span><span>  </span><span style="color:#bf616a;">labels</span><span>:
+</span><span>    </span><span style="color:#bf616a;">app</span><span>: </span><span style="color:#a3be8c;">restaurant-ms
+</span><span style="color:#bf616a;">spec</span><span>:
+</span><span>  </span><span style="color:#bf616a;">type</span><span>: </span><span style="color:#a3be8c;">NodePort
+</span><span>  </span><span style="color:#bf616a;">selector</span><span>:
+</span><span>    </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant-ms
+</span><span>  </span><span style="color:#bf616a;">ports</span><span>:
+</span><span>    - </span><span style="color:#bf616a;">port</span><span>: </span><span style="color:#d08770;">8000
+</span><span>      </span><span style="color:#bf616a;">targetPort</span><span>: </span><span style="color:#d08770;">8000
+</span><span>      </span><span style="color:#bf616a;">nodePort</span><span>: </span><span style="color:#d08770;">30006
+</span></code></pre>
+<p>Starting this will make the microservice available on the port <code>30006</code> of all nodes,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">kubectl</span><span> create</span><span style="color:#bf616a;"> -f</span><span> restaurant-service.yml
+</span></code></pre>
+<h2 id="ingress">Ingress</h2>
+<p>Now, we can see the microservice on <code>http://node-ip:30006</code> of all nodes but, we want only a singular ip that can send the request to all nodes. This is where Load Balancer and Ingress are useful.</p>
+<p>I am using <code>nginx-ingress-controller</code> here. Installing from helm,</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">helm</span><span> install nginx-ingress nginx-stable/nginx-ingress</span><span style="color:#bf616a;"> --set</span><span> prometheus.create=true
+</span></code></pre>
+<p><code>prometheus.create=true</code> provides metrics from nginx for prometheus.</p>
+<p>This automatically provisions a load balancer in Google Cloud which will give us a Singular IP. Now we need to define rules for routing, so we can access multiple microservices from the same IP,</p>
+<pre data-lang="yaml" style="background-color:#2b303b;color:#c0c5ce;" class="language-yaml "><code class="language-yaml" data-lang="yaml"><span style="color:#bf616a;">apiVersion</span><span>: </span><span style="color:#a3be8c;">k8s.nginx.org/v1
+</span><span style="color:#bf616a;">kind</span><span>: </span><span style="color:#a3be8c;">VirtualServer
+</span><span style="color:#bf616a;">metadata</span><span>:
+</span><span>  </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">ingress
+</span><span style="color:#bf616a;">spec</span><span>:
+</span><span>  </span><span style="color:#bf616a;">host</span><span>: </span><span style="color:#a3be8c;">opensoft.example.com
+</span><span>  </span><span style="color:#bf616a;">upstreams</span><span>:
+</span><span>  - </span><span style="color:#bf616a;">name</span><span>: </span><span style="color:#a3be8c;">restaurant
+</span><span>    </span><span style="color:#bf616a;">service</span><span>: </span><span style="color:#a3be8c;">restaurant-ms-service
+</span><span>    </span><span style="color:#bf616a;">port</span><span>: </span><span style="color:#d08770;">8000
+</span><span>  
+</span><span>  </span><span style="color:#bf616a;">routes</span><span>:
+</span><span>  - </span><span style="color:#bf616a;">path</span><span>: </span><span style="color:#a3be8c;">~/restaurant/?(.*)
+</span><span>    </span><span style="color:#bf616a;">action</span><span>:
+</span><span>      </span><span style="color:#bf616a;">proxy</span><span>:
+</span><span>        </span><span style="color:#bf616a;">upstream</span><span>: </span><span style="color:#a3be8c;">restaurant
+</span><span>        </span><span style="color:#bf616a;">rewritePath</span><span>: </span><span style="color:#a3be8c;">/$1
+</span></code></pre>
+<p>The <code>rewritePath</code> here converts <code>/restaurant/login</code> to <code>/login</code> so, we would not need to change the routes in all our microservices. Applying this, we can access our microservice at <code>http://load-balancer-ip/restaurant</code>.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">kubectl</span><span> apply</span><span style="color:#bf616a;"> -f</span><span> ingress.yml
+</span></code></pre>
+<h2 id="conclusion">Conclusion</h2>
+<p>This is how we deployed our microservices on Kubernetes. You can read the entire Problem Statement <a href="https://drive.google.com/file/d/1Mv5Ro2gi5nl3zGhA4IR3NMpwZdXXmL2M/view?fbclid=IwAR3IrikkanZaprOreedwmbIFp5YtudefssTREd5RFByRYoBKcOGG2QpotUw">here.</a></p>
+
+          </div>
+        </article>
+      </div>
+      
+      <div class="column is-2 is-hidden-mobile">
+        <aside class="menu" style="position: sticky; top: 48px">
+          <p class="heading has-text-weight-bold">Contents</p>
+          <ul class="menu-list">
+            
+            <li>
+              <a id="link-introduction" class="toc is-size-7 is-active"
+                href="https://sakshamar.in/posts/kubernetes/#introduction">
+                Introduction
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-initial-set-up" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/kubernetes/#initial-set-up">
+                Initial Set-up
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-deploying-a-microservice" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/kubernetes/#deploying-a-microservice">
+                Deploying a MicroService
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-creating-services" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/kubernetes/#creating-services">
+                Creating Services
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-ingress" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/kubernetes/#ingress">
+                Ingress
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-conclusion" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/kubernetes/#conclusion">
+                Conclusion
+              </a>
+              
+            </li>
+            
+          </ul>
+        </aside>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+              
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts&#x2F;introduction-to-docker&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              Introduction to Docker
+            </a>
+          </div>
+           
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts&#x2F;rabbitmq&#x2F;">
+              Keeping Microservices in Sync using RabbitMQ<span class="icon ml-2">
+                <i class="fas fa-arrow-circle-right"></i>
+              </span>
+            </a>
+          </div>
+          
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-6">
+        <div id="disqus_thread"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+  <footer class="footer py-4">
+    <div class="content has-text-centered">
+      <p>
+        Built with
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-code"></i>
+          </span>
+          <span>code</span>
+        </span>
+        and
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-heart"></i>
+          </span>
+          <span>love</span>
+        </span>
+      </p>
+      <p>
+        Powered by
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-power-off"></i>
+          </span>
+          <span>zola</span>
+        </span>
+      </p>
+    </div>
+  </footer>
+  
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/galleria.min.js" integrity="sha384-QSfwGT8/EU536DKdtyP2D6SLlh8zBaZ0cVkwfrwhqzIU9VCfJT00CLVP5t+HAiYg" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.js" integrity="sha384-DwpKI+deZB267+hPKwiOIc5Y2GKsVL0mR6hgz7GgIu7AgAMYqJwcJKY1YBNfhWcY" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@8.13.5/dist/mermaid.min.js" integrity="sha384-0yWn54pSGtfKCU+skfA69l25VsCw+MZt4LQov3xNRoS7YkAMrFokGgSBnAWSK4pv" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1.1.13/dist/chart.xkcd.min.js" integrity="sha384-xC3h1+IHXK8seA+8KfT79Z4e0GPsznjXBoMa5nd8ooWKplPyXx92NOmljWxLC/cs" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://sakshamar.in/elasticlunr.min.js"></script>
+  <script src="https://sakshamar.in/search_index.en.js"></script><script src="https://sakshamar.in/js/site.js"></script>
+
+  
+
+<script type="text/javascript">
+  const menuBarHeight = document.querySelector("nav.navbar").clientHeight;
+  const tocItems = document.querySelectorAll(".toc");
+  const navSections = new Array(tocItems.length);
+
+  tocItems.forEach((el, i) => {
+    let id = el.getAttribute("id").substring(5);
+    navSections[i] = document.getElementById(id);
+  })
+
+  function isVisible(tocIndex) {
+    const current = navSections[tocIndex];
+    const next = tocIndex < tocItems.length - 1 ? navSections[tocIndex + 1]
+      : document.querySelectorAll("section.section").item(1);
+
+    const c = current.getBoundingClientRect();
+    const n = next.getBoundingClientRect();
+    const h = (window.innerHeight || document.documentElement.clientHeight);
+
+    return (c.top <= h) && (n.top - menuBarHeight >= 0);
+  }
+
+  function activateIfVisible() {
+    for (b = true, i = 0; i < tocItems.length; i++) {
+      if (b && isVisible(i)) {
+        tocItems[i].classList.add('is-active');
+        b = false;
+      } else
+        tocItems[i].classList.remove('is-active');
+    }
+  }
+
+  var isTicking = null;
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      window.requestAnimationFrame(() => {
+        activateIfVisible();
+        isTicking = false;
+      });
+      isTicking = true;
+    }
+  }, false);
+</script>
+
+
+
+<script>
+  var disqus_config = function () {
+    this.page.url = "https://sakshamar.in";
+    this.page.identifier = "/posts/kubernetes/";
+  };
+
+  (function () {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://sakshamar.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+
+
+
+  
+  
+</body>
+
+</html>

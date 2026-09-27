@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.css" integrity="sha384-+rY0QD+LRnTOquDMzGa9lXU6jIwdiQuwCJQ2cdcW0qeP/0UbjQCZlXnRsUMA+9pH" crossorigin="anonymous">
+  
+
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.1/css/academicons.min.css" integrity="sha384-FIue+PI4SsI9XfHCz8dBLg33b0c1fMJgNU3X//L26FYbGnlSEfWmNT7zgWc2N9b6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link href="https://sakshamar.in/deep-thought.css" rel="stylesheet" />
+  
+  
+
+  <title>
+    
+ | Using Selenium in Python
+
+  </title>
+
+  
+  
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mathtex-script-type.min.js" integrity="sha384-jiBVvJ8NGGj5n7kJaiWwWp9AjC+Yh8rhZY3GtAX8yU28azcLgoRo4oukO87g7zDT" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item is-size-5 has-text-weight-bold" href="https:&#x2F;&#x2F;sakshamar.in"></a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;categories">
+            Categories
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            Using Selenium in Python
+          </h1>
+          <p class="subtitle">Learning Selenium through an example</p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>sAksham-Ar published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2021-04-29">April 29, 2021</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>2 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>346 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://sakshamar.in/categories/python/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>Python</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <p>Today we are going to learn how to automate your browser using Selenium in Python.Today we will go to Youtube search something and store the results as JSON.Scraping Youtube results is not possible using normal webscraping as it uses a JS framework.</p>
+<h2 id="requirements">Requirements</h2>
+<p>For web scraping we would require selenium library.</p>
+<p>Just install it with pip as:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">pip3</span><span> install selenium
+</span></code></pre>
+<p>You would also require <a href="https://chromedriver.chromium.org/downloads">chromedriver</a> if you have Chrome or <a href="https://github.com/mozilla/geckodriver/releases">geckodriver</a> if you have Firefox.</p>
+<h2 id="starting">Starting</h2>
+<p>Firstly, we would need to import the required libraries:</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span style="color:#b48ead;">from </span><span>selenium </span><span style="color:#b48ead;">import </span><span>webdriver
+</span><span style="color:#b48ead;">from </span><span>selenium.webdriver.common.keys </span><span style="color:#b48ead;">import </span><span>Keys
+</span><span style="color:#b48ead;">import </span><span>os
+</span><span style="color:#b48ead;">import </span><span>json
+</span><span style="color:#b48ead;">from </span><span>time </span><span style="color:#b48ead;">import </span><span>sleep
+</span></code></pre>
+<p>Now, we would need to provide the path for our chromedriver or geckodriver.(<em>NOTE:I have kept the chromedriver in the same directory as my python script.</em>)</p>
+<p>In python in Windows this would look like:</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span>driver=webdriver.</span><span style="color:#bf616a;">Chrome</span><span>(os.</span><span style="color:#bf616a;">getcwd</span><span>()+&quot;</span><span style="color:#a3be8c;">/chromedriver.exe</span><span>&quot;)
+</span></code></pre>
+<p>For Firefox:</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span>driver=webdriver.</span><span style="color:#bf616a;">Firefox</span><span>(os.</span><span style="color:#bf616a;">getcwd</span><span>()+&quot;</span><span style="color:#a3be8c;">/geckodriver.exe</span><span>&quot;)
+</span></code></pre>
+<p>We will now navigate to the youtube website.</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span>url=&quot;</span><span style="color:#a3be8c;">https://www.youtube.com/</span><span>&quot;
+</span><span>driver.</span><span style="color:#bf616a;">get</span><span>(url)
+</span></code></pre>
+<p>Now the browser will go to youtube.com .</p>
+<h2 id="searching-a-video">Searching a video</h2>
+<p>The best way in my opinion to learn selenium is running it in interactive mode.So through command line navigate to where your script is and run:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">python3 -i</span><span> your_file_name.py
+</span></code></pre>
+<p>You will see that a browser has opened and it has navigated to youtube.com.</p>
+<p>Next we need to get the serach bar, we do this by clicking inspect element on it.</p>
+<p><img src="/assets/selenium-search.jpg" alt="search div" /></p>
+<p>From this photo we can see that it is an input element <code>id</code> search. We get that element using selenium:</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span>search=driver.</span><span style="color:#bf616a;">find_element_by_xpath</span><span>(&quot;</span><span style="color:#a3be8c;">//input[@id=&#39;search&#39;]</span><span>&quot;)
+</span></code></pre>
+<p>Now we send what we want to type:</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span>search.</span><span style="color:#bf616a;">send_keys</span><span>(&quot;</span><span style="color:#a3be8c;">foo bar</span><span>&quot;)
+</span></code></pre>
+<p>As you can see foo bar is typed in the search bar.Now sending enter to search:</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span>search.</span><span style="color:#bf616a;">send_keys</span><span>(Keys.</span><span style="color:#bf616a;">RETURN</span><span>)
+</span></code></pre>
+<p>Now it should have opened the results page.</p>
+<h2 id="storing-it-as-json">Storing it as JSON</h2>
+<p>We now need to store the title and links of videos so we first inspect element the title to find which element they are in.</p>
+<p><img src="/assets/selenium-title.jpg" alt="search div" /></p>
+<p>We see that they are in an <code>a</code> element with <code>id = video-title</code>. So we just find all of these and store the href and title in a list.</p>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span>videos=driver.</span><span style="color:#bf616a;">find_elements_by_xpath</span><span>(&quot;</span><span style="color:#a3be8c;">//a[@id=&#39;video-title&#39;]</span><span>&quot;)
+</span><span>
+</span><span>ResultList=[]
+</span><span style="color:#b48ead;">for </span><span>video </span><span style="color:#b48ead;">in </span><span>videos:
+</span><span>    ResultDict={}
+</span><span>    ResultDict[&quot;</span><span style="color:#a3be8c;">title</span><span>&quot;]=video.</span><span style="color:#bf616a;">get_attribute</span><span>(&quot;</span><span style="color:#a3be8c;">title</span><span>&quot;)
+</span><span>    ResultDict[&quot;</span><span style="color:#a3be8c;">link</span><span>&quot;]=video.</span><span style="color:#bf616a;">get_Attribute</span><span>(&quot;</span><span style="color:#a3be8c;">href</span><span>&quot;)
+</span><span>    ResultList.</span><span style="color:#bf616a;">append</span><span>(ResultDict)
+</span><span>
+</span><span style="color:#96b5b4;">print</span><span>(json.</span><span style="color:#bf616a;">dumps</span><span>(ResultList,</span><span style="color:#bf616a;">indent</span><span>=</span><span style="color:#d08770;">4</span><span>))
+</span></code></pre>
+<p>Output:</p>
+<p><img src="/assets/selenium-output.jpg" alt="output" /></p>
+<h2 id="entire-code">Entire Code</h2>
+<pre data-lang="py" style="background-color:#2b303b;color:#c0c5ce;" class="language-py "><code class="language-py" data-lang="py"><span style="color:#b48ead;">from </span><span>selenium </span><span style="color:#b48ead;">import </span><span>webdriver
+</span><span style="color:#b48ead;">from </span><span>selenium.webdriver.common.keys </span><span style="color:#b48ead;">import </span><span>Keys
+</span><span style="color:#b48ead;">import </span><span>os
+</span><span style="color:#b48ead;">import </span><span>json
+</span><span style="color:#b48ead;">from </span><span>time </span><span style="color:#b48ead;">import </span><span>sleep
+</span><span>
+</span><span>driver=webdriver.</span><span style="color:#bf616a;">Chrome</span><span>(os.</span><span style="color:#bf616a;">getcwd</span><span>()+&quot;</span><span style="color:#a3be8c;">/chromedriver.exe</span><span>&quot;)
+</span><span>
+</span><span>url=&quot;</span><span style="color:#a3be8c;">https://www.youtube.com/</span><span>&quot;
+</span><span>driver.</span><span style="color:#bf616a;">get</span><span>(url)
+</span><span>
+</span><span>search=driver.</span><span style="color:#bf616a;">find_element_by_xpath</span><span>(&quot;</span><span style="color:#a3be8c;">//input[@id=&#39;search&#39;]</span><span>&quot;)
+</span><span>search.</span><span style="color:#bf616a;">send_keys</span><span>(&quot;</span><span style="color:#a3be8c;">foo bar</span><span>&quot;)
+</span><span style="color:#bf616a;">sleep</span><span>(</span><span style="color:#d08770;">1</span><span>)</span><span style="color:#65737e;">#waiting for the text to be typed
+</span><span>search.</span><span style="color:#bf616a;">send_keys</span><span>(Keys.</span><span style="color:#bf616a;">RETURN</span><span>)
+</span><span>
+</span><span style="color:#bf616a;">sleep</span><span>(</span><span style="color:#d08770;">2</span><span>)</span><span style="color:#65737e;"># to give time for the search to load
+</span><span>videos=driver.</span><span style="color:#bf616a;">find_elements_by_xpath</span><span>(&quot;</span><span style="color:#a3be8c;">//a[@id=&#39;video-title&#39;]</span><span>&quot;)
+</span><span>
+</span><span>ResultList=[]
+</span><span style="color:#b48ead;">for </span><span>video </span><span style="color:#b48ead;">in </span><span>videos:
+</span><span>    ResultDict={}
+</span><span>    ResultDict[&quot;</span><span style="color:#a3be8c;">title</span><span>&quot;]=video.</span><span style="color:#bf616a;">get_attribute</span><span>(&quot;</span><span style="color:#a3be8c;">title</span><span>&quot;)
+</span><span>    ResultDict[&quot;</span><span style="color:#a3be8c;">link</span><span>&quot;]=video.</span><span style="color:#bf616a;">get_attribute</span><span>(&quot;</span><span style="color:#a3be8c;">href</span><span>&quot;)
+</span><span>    ResultList.</span><span style="color:#bf616a;">append</span><span>(ResultDict)
+</span><span>
+</span><span style="color:#96b5b4;">print</span><span>(json.</span><span style="color:#bf616a;">dumps</span><span>(ResultList,</span><span style="color:#bf616a;">indent</span><span>=</span><span style="color:#d08770;">4</span><span>))
+</span><span>
+</span><span>driver.</span><span style="color:#bf616a;">quit</span><span>()</span><span style="color:#65737e;">#closing the browser
+</span></code></pre>
+<h2 id="conclusion">Conclusion</h2>
+<p>This is just a small part of what selenium can do, read more <a href="https://selenium-python.readthedocs.io/">here</a>. Have fun experimenting with this!</p>
+
+          </div>
+        </article>
+      </div>
+      
+      <div class="column is-2 is-hidden-mobile">
+        <aside class="menu" style="position: sticky; top: 48px">
+          <p class="heading has-text-weight-bold">Contents</p>
+          <ul class="menu-list">
+            
+            <li>
+              <a id="link-requirements" class="toc is-size-7 is-active"
+                href="https://sakshamar.in/posts/using-selenium-in-python/#requirements">
+                Requirements
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-starting" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/using-selenium-in-python/#starting">
+                Starting
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-searching-a-video" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/using-selenium-in-python/#searching-a-video">
+                Searching a video
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-storing-it-as-json" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/using-selenium-in-python/#storing-it-as-json">
+                Storing it as JSON
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-entire-code" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/using-selenium-in-python/#entire-code">
+                Entire Code
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-conclusion" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/using-selenium-in-python/#conclusion">
+                Conclusion
+              </a>
+              
+            </li>
+            
+          </ul>
+        </aside>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+              
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts&#x2F;web-scraping-in-python&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              Web scraping in Python
+            </a>
+          </div>
+           
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts&#x2F;introduction-to-docker&#x2F;">
+              Introduction to Docker<span class="icon ml-2">
+                <i class="fas fa-arrow-circle-right"></i>
+              </span>
+            </a>
+          </div>
+          
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-6">
+        <div id="disqus_thread"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+  <footer class="footer py-4">
+    <div class="content has-text-centered">
+      <p>
+        Built with
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-code"></i>
+          </span>
+          <span>code</span>
+        </span>
+        and
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-heart"></i>
+          </span>
+          <span>love</span>
+        </span>
+      </p>
+      <p>
+        Powered by
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-power-off"></i>
+          </span>
+          <span>zola</span>
+        </span>
+      </p>
+    </div>
+  </footer>
+  
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/galleria.min.js" integrity="sha384-QSfwGT8/EU536DKdtyP2D6SLlh8zBaZ0cVkwfrwhqzIU9VCfJT00CLVP5t+HAiYg" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.js" integrity="sha384-DwpKI+deZB267+hPKwiOIc5Y2GKsVL0mR6hgz7GgIu7AgAMYqJwcJKY1YBNfhWcY" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@8.13.5/dist/mermaid.min.js" integrity="sha384-0yWn54pSGtfKCU+skfA69l25VsCw+MZt4LQov3xNRoS7YkAMrFokGgSBnAWSK4pv" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1.1.13/dist/chart.xkcd.min.js" integrity="sha384-xC3h1+IHXK8seA+8KfT79Z4e0GPsznjXBoMa5nd8ooWKplPyXx92NOmljWxLC/cs" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://sakshamar.in/elasticlunr.min.js"></script>
+  <script src="https://sakshamar.in/search_index.en.js"></script><script src="https://sakshamar.in/js/site.js"></script>
+
+  
+
+<script type="text/javascript">
+  const menuBarHeight = document.querySelector("nav.navbar").clientHeight;
+  const tocItems = document.querySelectorAll(".toc");
+  const navSections = new Array(tocItems.length);
+
+  tocItems.forEach((el, i) => {
+    let id = el.getAttribute("id").substring(5);
+    navSections[i] = document.getElementById(id);
+  })
+
+  function isVisible(tocIndex) {
+    const current = navSections[tocIndex];
+    const next = tocIndex < tocItems.length - 1 ? navSections[tocIndex + 1]
+      : document.querySelectorAll("section.section").item(1);
+
+    const c = current.getBoundingClientRect();
+    const n = next.getBoundingClientRect();
+    const h = (window.innerHeight || document.documentElement.clientHeight);
+
+    return (c.top <= h) && (n.top - menuBarHeight >= 0);
+  }
+
+  function activateIfVisible() {
+    for (b = true, i = 0; i < tocItems.length; i++) {
+      if (b && isVisible(i)) {
+        tocItems[i].classList.add('is-active');
+        b = false;
+      } else
+        tocItems[i].classList.remove('is-active');
+    }
+  }
+
+  var isTicking = null;
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      window.requestAnimationFrame(() => {
+        activateIfVisible();
+        isTicking = false;
+      });
+      isTicking = true;
+    }
+  }, false);
+</script>
+
+
+
+<script>
+  var disqus_config = function () {
+    this.page.url = "https://sakshamar.in";
+    this.page.identifier = "/posts/using-selenium-in-python/";
+  };
+
+  (function () {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://sakshamar.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+
+
+
+  
+  
+</body>
+
+</html>
