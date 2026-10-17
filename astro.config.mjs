@@ -1,3 +1,4 @@
+import legacyRedirects from './src/data/legacy-redirects.json' with { type: 'json' };
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
@@ -5,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://sakshamar.in',
+  redirects: legacyRedirects,
   integrations: [
     mdx(),
     sitemap(),

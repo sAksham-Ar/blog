@@ -14,11 +14,14 @@ const searchData = allPosts.map((post) => ({
 
 <div
   id="search-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Search articles"
   class="fixed inset-0 z-100 hidden bg-slate-900/60 backdrop-blur-sm p-4 sm:p-6 md:p-20 flex justify-center items-start overflow-y-auto"
 >
   <div
     class="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transform transition-all"
-    onclick="event.stopPropagation()"
+
   >
     <!-- Search Input Bar -->
     <div class="flex items-center px-4 py-3 border-b border-slate-200 dark:border-slate-800">
@@ -26,18 +29,22 @@ const searchData = allPosts.map((post) => ({
       <input
         id="search-input"
         type="text"
+        aria-label="Search articles"
+        aria-controls="search-results"
         placeholder="Type to search articles, series, topics, tech..."
         class="w-full bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden text-base"
         autocomplete="off"
       />
       <button
         id="close-search-btn"
+        aria-label="Close search"
         class="px-2 py-1 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-800 rounded-md"
       >
         ESC
       </button>
     </div>
 
+    <p id="search-status" role="status" aria-live="polite" class="sr-only"></p>
     <!-- Search Results Container -->
     <div id="search-results" class="max-h-96 overflow-y-auto p-4 space-y-2">
       <p class="text-xs text-slate-400 text-center py-4">Type something to search...</p>
@@ -52,58 +59,97 @@ const searchData = allPosts.map((post) => ({
   const searchBtn = document.getElementById('search-btn');
   const closeBtn = document.getElementById('close-search-btn');
 
+  let returnFocus = null;
+  let background = [];
+  const status = document.getElementById('search-status');
+  const isOpen = () => !searchModal.classList.contains('hidden');
+
   function openSearch() {
-    searchModal?.classList.remove('hidden');
-    searchInput?.focus();
+    if (isOpen()) return;
+    returnFocus = document.activeElement;
+    background = Array.from(document.body.children)
+      .filter(element => !element.contains(searchModal))
+      .map(element => [element, element.inert]);
+    background.forEach(([element]) => { element.inert = true; });
+    searchModal.classList.remove('hidden');
+    renderResults([]);
+    searchInput.focus();
   }
 
   function closeSearch() {
-    searchModal?.classList.add('hidden');
-    if (searchInput) searchInput.value = '';
+    if (!isOpen()) return;
+    searchModal.classList.add('hidden');
+    background.forEach(([element, inert]) => { element.inert = inert; });
+    background = [];
+    searchInput.value = '';
     renderResults([]);
+    if (returnFocus?.isConnected) returnFocus.focus();
+    else searchBtn?.focus();
   }
 
   searchBtn?.addEventListener('click', openSearch);
   closeBtn?.addEventListener('click', closeSearch);
-  searchModal?.addEventListener('click', closeSearch);
+  searchModal.addEventListener('click', (event) => {
+    if (event.target === searchModal) closeSearch();
+  });
+  document.addEventListener('focusin', (event) => {
+    if (isOpen() && !searchModal.contains(event.target)) searchInput.focus();
+  });
 
-  window.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-      e.preventDefault();
-      if (searchModal?.classList.contains('hidden')) {
-        openSearch();
-      } else {
-        closeSearch();
-      }
+  window.addEventListener('keydown', (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      isOpen() ? closeSearch() : openSearch();
     }
-    if (e.key === 'Escape' && !searchModal?.classList.contains('hidden')) {
+    if (!isOpen()) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
       closeSearch();
+    }
+    if (event.key === 'Tab') {
+      const focusable = Array.from(searchModal.querySelectorAll('input, button, a[href]'));
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     }
   });
 
+  function element(tag, className, text) {
+    const node = document.createElement(tag);
+    node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
   function renderResults(results) {
-    if (!searchResults) return;
+    searchResults.replaceChildren();
+    status.textContent = searchInput.value.trim() ? `${results.length} articles found` : '';
     if (results.length === 0) {
-      if (searchInput && searchInput.value.trim() !== '') {
-        searchResults.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No articles found matching "${searchInput.value}"</p>`;
-      } else {
-        searchResults.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Type to search across all ${searchData.length} articles...</p>`;
-      }
+      const message = searchInput.value.trim()
+        ? `No articles found matching "${searchInput.value}"`
+        : `Type to search across all ${searchData.length} articles...`;
+      searchResults.append(element('p', 'text-xs text-slate-400 text-center py-6', message));
       return;
     }
-
-    searchResults.innerHTML = results.map(item => `
-      <a href="/posts/${item.slug}" class="block p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group">
-        <div class="flex items-center justify-between gap-2">
-          <h4 class="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">${item.title}</h4>
-          <div class="flex items-center gap-1.5 shrink-0">
-            ${item.series ? `<span class="px-2 py-0.5 text-[10px] font-medium rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400">${item.series}</span>` : ''}
-            <span class="px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400">${item.category}</span>
-          </div>
-        </div>
-        ${item.description ? `<p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-1">${item.description}</p>` : ''}
-      </a>
-    `).join('');
+    for (const item of results) {
+      const link = element('a', 'block p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 focus-visible:outline-2 focus-visible:outline-blue-500 transition-colors group');
+      link.href = `/posts/${encodeURIComponent(item.slug)}/`;
+      const row = element('div', 'flex items-center justify-between gap-2');
+      row.append(element('h4', 'text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400', item.title));
+      const badges = element('div', 'flex items-center gap-1.5 shrink-0');
+      if (item.series) badges.append(element('span', 'px-2 py-0.5 text-[10px] font-medium rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400', item.series));
+      badges.append(element('span', 'px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400', item.category));
+      row.append(badges);
+      link.append(row);
+      if (item.description) link.append(element('p', 'text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-1', item.description));
+      searchResults.append(link);
+    }
   }
 
   searchInput?.addEventListener('input', (e) => {

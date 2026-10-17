@@ -119,7 +119,7 @@ data:
   DATABASE_URL: postgres://restaurant:restaurant@restaurant-db/restaurant
 ```
 
-We are using RabbitMQ to keep our databases in sync, read more [here.](@/posts/rabbitmq.md)
+We are using RabbitMQ to keep our databases in sync, read more [here.](/posts/rabbitmq/)
 
 After the Config Map, we create the deployment for the microservice,
 
