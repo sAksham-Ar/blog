@@ -1,4 +1,5 @@
 ---
+import RunnerScene from './RunnerScene.astro';
 ---
 <section class="terminal-hero site-width" aria-labelledby="intro-heading">
   <div class="hero-copy">
@@ -8,8 +9,28 @@
     <a href="/posts" class="terminal-button">cd ~/articles <span aria-hidden="true">→</span></a>
   </div>
   <figure class="terminal-window">
-    <figcaption><span aria-hidden="true">● ● ●</span><span>outside.sh</span></figcaption>
-    <img src="/images/forest-runner.svg" width="240" height="210" alt="Pixel art of a runner following a moonlit trail through a pine forest" fetchpriority="high" />
+    <figcaption><span aria-hidden="true">● ● ●</span><span>outside.sh</span><button id="runner-toggle" type="button" aria-controls="forest-runner" aria-label="Pause runner animation" aria-pressed="false">pause</button></figcaption>
+    <RunnerScene />
     <div class="terminal-output"><span>&gt; process: keep_moving</span><span>&gt; status: <span class="running-status">running</span></span></div>
   </figure>
 </section>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('#runner-toggle');
+  const scene = toggle?.closest('figure');
+  const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function setPaused(paused: boolean) {
+    scene?.classList.toggle('is-paused', paused);
+    toggle?.setAttribute('aria-pressed', String(paused));
+    toggle?.setAttribute('aria-label', paused ? 'Resume runner animation' : 'Pause runner animation');
+    if (toggle) toggle.textContent = paused ? 'resume' : 'pause';
+  }
+  // Respect motion preferences and keep the control in sync if they change.
+  function syncPreference() {
+    if (toggle) toggle.hidden = preference.matches;
+    setPaused(preference.matches);
+  }
+  syncPreference();
+  preference.addEventListener('change', syncPreference);
+  toggle?.addEventListener('click', () => setPaused(!scene?.classList.contains('is-paused')));
+</script>
