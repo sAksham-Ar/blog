@@ -20,7 +20,7 @@ const {
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -51,10 +51,11 @@ const {
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, Astro.site)} />
   </head>
-  <body class="min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white">
+  <body class="min-h-screen flex flex-col antialiased ">
+    <a href="#main-content" class="skip-link">Skip to content</a>
     <Navbar />
     
-    <main class="flex-grow">
+    <main id="main-content" class="flex-grow">
       <slot />
     </main>
 

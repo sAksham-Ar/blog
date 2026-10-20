@@ -1,52 +1,15 @@
 ---
 ---
-
-<section class="relative pt-12 pb-12 overflow-hidden">
-  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row items-center sm:items-start gap-8">
-    <!-- Avatar with Gradient Ring -->
-    <div class="relative shrink-0 group">
-      <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-full blur-md opacity-75 group-hover:opacity-100 transition duration-300"></div>
-      <img
-        src="/assets/saksham.jpg"
-        alt="Saksham Arya"
-        class="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover border-2 border-white dark:border-slate-900 shadow-xl"
-      />
-    </div>
-
-    <!-- Bio Content -->
-    <div class="space-y-4">
-      <div class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold tracking-wider text-blue-600 dark:text-blue-400 uppercase bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 rounded-full">
-        <span>Software Engineer & Systems Enthusiast</span>
-      </div>
-
-      <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
-        Hi, I'm <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">Saksham Arya</span> 👋
-      </h1>
-
-      <p class="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl">
-        Welcome to my personal tech blog! I write about distributed systems, backend infrastructure, containerization, and low-level programming with <strong>Go</strong>, <strong>Docker</strong>, <strong>Kubernetes</strong>, <strong>C++</strong>, and <strong>Python</strong>.
-      </p>
-
-      <!-- Tech Stack Pills -->
-      <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-2">
-        <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">Golang</span>
-        <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">Kubernetes</span>
-        <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">Docker</span>
-        <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">C++</span>
-        <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">RabbitMQ</span>
-        <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">Python</span>
-      </div>
-
-      <!-- Quick Action Buttons -->
-      <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-3">
-        <a
-          href="/posts"
-          class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md hover:shadow-lg transition-all"
-        >
-          Explore Articles
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </a>
-      </div>
-    </div>
+<section class="terminal-hero site-width" aria-labelledby="intro-heading">
+  <div class="hero-copy">
+    <p class="command">$ whoami</p>
+    <h1 id="intro-heading">Saksham Arya<span class="cursor" aria-hidden="true">_</span></h1>
+    <p class="hero-tagline">Engineer. Runner. Tinkerer.</p>
+    <a href="/posts" class="terminal-button">cd ~/articles <span aria-hidden="true">→</span></a>
   </div>
+  <figure class="terminal-window">
+    <figcaption><span aria-hidden="true">● ● ●</span><span>outside.sh</span></figcaption>
+    <img src="/images/forest-runner.svg" width="240" height="210" alt="Pixel art of a runner following a moonlit trail through a pine forest" fetchpriority="high" />
+    <div class="terminal-output"><span>&gt; process: keep_moving</span><span>&gt; status: <span class="running-status">running</span></span></div>
+  </figure>
 </section>

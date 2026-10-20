@@ -14,39 +14,11 @@ const allPosts = rawPosts.map((p) => ({
 // Sort posts by date descending
 allPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
-
 <BaseLayout>
-  <!-- Hero Section -->
   <Hero />
-
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
-    <!-- All Recent Posts Grid -->
-    <section class="space-y-6">
-      <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-          Recent Articles
-        </h2>
-        <a href="/posts" class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline">
-          View all posts &rarr;
-        </a>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {allPosts.slice(0, 9).map((post) => (
-          <PostCard post={post} />
-        ))}
-      </div>
-
-      {allPosts.length > 9 && (
-        <div class="text-center pt-6">
-          <a
-            href="/posts"
-            class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-700 transition-all"
-          >
-            View All {allPosts.length} Articles
-          </a>
-        </div>
-      )}
-    </section>
-  </div>
+  <section class="site-width recent-posts" aria-labelledby="recent-heading">
+    <div class="section-heading"><h2 id="recent-heading"><span>01 /</span> latest_commits</h2><a href="/posts">view all ↗</a></div>
+    <div class="post-list">{allPosts.slice(0, 6).map((post, index) => <PostCard post={post} index={index} />)}</div>
+    <a class="archive-link" href="/posts">ls ~/articles <span>— {allPosts.length} entries →</span></a>
+  </section>
 </BaseLayout>

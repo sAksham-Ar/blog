@@ -41,9 +41,9 @@ posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).get
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {posts.map((post) => (
-        <PostCard post={post} />
+    <div class="post-list">
+      {posts.map((post, index) => (
+        <PostCard post={post} index={index} />
       ))}
     </div>
   </div>

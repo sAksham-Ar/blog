@@ -40,9 +40,9 @@ const categories = Array.from(new Set(allPosts.map((post) => post.data.category)
     </div>
 
     <!-- Posts Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {allPosts.map((post) => (
-        <PostCard post={post} />
+    <div class="post-list">
+      {allPosts.map((post, index) => (
+        <PostCard post={post} index={index} />
       ))}
     </div>
   </div>
