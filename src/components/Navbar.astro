@@ -3,7 +3,7 @@ const pathname = Astro.url.pathname;
 const links = [{href:'/posts',label:'~/posts'}, {href:'/series',label:'~/series'}, {href:'/categories',label:'~/topics'}];
 ---
 <header class="site-header site-width">
-  <a href="/" class="site-logo" aria-label="Saksham Arya — home"><span>[sA]</span> ~/saksham</a>
+  <a href="/" class="site-logo" aria-label="Saksham Arya — home"><span>[root]</span> ~/saksham</a>
   <nav aria-label="Main navigation">
     {links.map(link => <a href={link.href} aria-current={pathname.startsWith(link.href) ? 'page' : undefined}>{link.label}</a>)}
     <button id="search-btn" type="button" aria-label="Search posts" title="Search posts (Ctrl or Command + K)">[⌕]<span class="search-shortcut" aria-hidden="true">⌘K</span></button>
