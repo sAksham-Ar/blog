@@ -4,6 +4,7 @@
   "description": "Saksham Arya's Personal Technical Blog",
   "type": "module",
   "scripts": {
+    "test": "node --test tests/*.test.mjs",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",

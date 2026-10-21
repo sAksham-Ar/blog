@@ -1,0 +1,135 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map(post => ({ slug: post.id.replace(/\.mdx?$/, ''), title: post.data.title,
+    date: post.data.date.toISOString().slice(0, 10), category: post.data.category,
+    series: post.data.series, description: post.data.description, body: post.body || '' }));
+const data = JSON.stringify(posts).replace(/</g, '\\u003c');
+---
+<BaseLayout title="Terminal | Saksham Arya" description="Explore Saksham Arya's engineering notes from an interactive terminal. Browse with ls, read with cat, and search with find.">
+  <section class="shell-page site-width" aria-labelledby="shell-heading">
+    <div class="shell-heading"><div><p class="command">$ ssh saksham</p><h1 id="shell-heading">A different way in<span class="cursor" aria-hidden="true">_</span></h1></div><a href="/" class="view-link">[ regular view ↗ ]</a></div>
+    <p class="shell-intro">Same notes. Familiar commands. Make yourself at home.</p>
+    <div class="blog-shell">
+      <div class="shell-titlebar"><span aria-hidden="true">● ● ●</span><span>root@saksham — blog.sh</span><button type="button" id="clear-terminal" aria-label="Clear terminal output">clear</button></div>
+      <div id="terminal-log" role="log" aria-label="Terminal output" aria-live="polite" aria-relevant="additions" tabindex="0">
+        <div class="shell-welcome"><strong>Welcome to ~/saksham.</strong><p>{posts.length} articles. A few rabbit holes.</p><p>Start with <code>ls</code>, or type <code>help</code> for the command list.<br />Click a filename to read it. Tab completes paths.</p></div>
+      </div>
+      <form id="terminal-form" autocomplete="off">
+        <label for="terminal-input" id="terminal-prompt">root@saksham:~$</label>
+        <input id="terminal-input" name="command" type="text" aria-label="Terminal command" aria-describedby="terminal-keyboard-hint" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="send" maxlength="2000" />
+        <button type="submit" aria-label="Run command">↵</button>
+      </form>
+    </div>
+    <div class="shell-starters" aria-label="Example commands"><span>Try:</span><button type="button" data-command="ls">ls</button><button type="button" data-command="ls posts/">ls posts/</button><button type="button" data-command="cat README.md">cat README.md</button><button type="button" data-command={'find ~ -iname "*golang*"'}>find ~ -iname "*golang*"</button></div>
+    <p id="terminal-keyboard-hint" class="shell-hint">Tab completes · ↑ / ↓ history · Ctrl+L clears · Shift+Tab leaves the input · exit returns to the site</p>
+    <noscript><p class="shell-intro">Enable JavaScript to use the terminal, or <a href="/posts">browse all articles →</a>.</p></noscript>
+  </section>
+  <script id="terminal-data" type="application/json" set:html={data} />
+</BaseLayout>
+
+<script>
+  import { createTerminal } from '../lib/terminal.mjs';
+  const data = document.getElementById('terminal-data');
+  const log = document.getElementById('terminal-log')!;
+  const form = document.getElementById('terminal-form') as HTMLFormElement;
+  const input = document.getElementById('terminal-input') as HTMLInputElement;
+  const prompt = document.getElementById('terminal-prompt')!;
+  const shell = createTerminal(JSON.parse(data?.textContent || '[]'));
+  const history: string[] = [];
+  let historyIndex = 0, draft = '';
+
+  function scrollToEnd() { log.scrollTop = log.scrollHeight; }
+  function run(command: string) {
+    if (!command.trim()) return;
+    const group = document.createElement('div');
+    group.className = 'shell-command-group';
+    const echoed = document.createElement('p');
+    echoed.className = 'shell-echo';
+    const label = document.createElement('span');
+    label.textContent = shell.prompt + ' ';
+    echoed.append(label, document.createTextNode(command));
+    group.append(echoed);
+    const result = shell.execute(command);
+    if (result.clear) log.replaceChildren();
+    else {
+      for (const line of result.lines) {
+        const row = document.createElement(line.url ? 'a' : line.command ? 'button' : 'pre');
+        row.textContent = line.text;
+        row.className = 'shell-line' + (line.error ? ' shell-error' : '') + (line.directory ? ' shell-directory' : '');
+        if (row instanceof HTMLButtonElement) { row.type = 'button'; row.addEventListener('click', () => run(line.command)); }
+        if (row instanceof HTMLAnchorElement) row.href = line.url;
+        group.append(row);
+      }
+      log.append(group);
+      // Bound the scrollback while retaining command history independently.
+      while (log.children.length > 40) log.firstElementChild?.remove();
+    }
+    if (history.at(-1) !== command) history.push(command);
+    if (history.length > 100) history.shift();
+    historyIndex = history.length;
+    draft = '';
+    input.value = '';
+    prompt.textContent = shell.prompt;
+    scrollToEnd();
+    if (result.url) window.location.assign(result.url);
+    else input.focus({ preventScroll: true });
+  }
+  form.addEventListener('submit', event => { event.preventDefault(); run(input.value); });
+  document.querySelectorAll<HTMLButtonElement>('[data-command]').forEach(button => button.addEventListener('click', () => run(button.dataset.command!)));
+  document.getElementById('clear-terminal')?.addEventListener('click', () => run('clear'));
+  input.addEventListener('keydown', event => {
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (historyIndex === history.length) draft = input.value;
+      historyIndex = Math.max(0, Math.min(history.length, historyIndex + (event.key === 'ArrowUp' ? -1 : 1)));
+      input.value = historyIndex === history.length ? draft : history[historyIndex];
+      input.setSelectionRange(input.value.length, input.value.length);
+    } else if (event.key === 'Tab' && !event.shiftKey) {
+      event.preventDefault();
+      const completed = shell.complete(input.value);
+      if (completed.value !== input.value) input.value = completed.value;
+      else if (completed.matches.length > 1) {
+        const matches = document.createElement('pre');
+        matches.className = 'shell-line shell-completions';
+        matches.textContent = completed.matches.join('\n');
+        log.append(matches);
+        scrollToEnd();
+      }
+    } else if (event.ctrlKey && event.key.toLowerCase() === 'l') {
+      event.preventDefault(); run('clear');
+    } else if (event.ctrlKey && event.key.toLowerCase() === 'c') {
+      event.preventDefault(); input.value = ''; historyIndex = history.length; draft = '';
+    }
+  });
+</script>
+<style>
+  .shell-page {padding-top:46px;}
+  .shell-heading {display:flex;align-items:center;justify-content:space-between;gap:20px;}
+  .shell-heading .command {margin:0 0 16px;}
+  #shell-heading {font-size:clamp(24px,4vw,36px);letter-spacing:-1.5px;color:#e4eedc;margin:0;}
+  .view-link {color:var(--accent);font-size:11px;white-space:nowrap;}
+  .shell-intro {font-size:12px;color:var(--muted);margin:17px 0 28px;}
+  .blog-shell {border:1px solid var(--border);background:#0d1510;box-shadow:5px 5px #142018;}
+  .shell-titlebar {display:flex;align-items:center;gap:20px;border-bottom:1px solid var(--border);background:var(--surface);padding:12px 20px;font-size:10px;color:var(--muted);}
+  .shell-titlebar>span:first-child {letter-spacing:3px;color:#72856c;font-size:8px;}
+  .shell-titlebar button {margin-left:auto;border:1px solid var(--border);padding:2px 7px;}
+  #terminal-log {height:clamp(280px,42vh,520px);overflow:auto;overscroll-behavior:contain;padding:24px;font-size:12px;scrollbar-gutter:stable;}
+  .shell-welcome {color:var(--muted);line-height:1.9;}
+  .shell-welcome strong {color:var(--accent);font-weight:500;font-size:16px;}
+  .shell-welcome p {margin:9px 0;}
+  .shell-welcome code {color:var(--text);}
+  #terminal-form {display:flex;align-items:center;gap:12px;padding:16px 20px;border-top:1px solid var(--border);font-size:12px;background:var(--surface);}
+  #terminal-prompt {color:var(--accent);overflow-wrap:anywhere;max-width:58%;flex-shrink:0;}
+  #terminal-input {min-width:0;width:100%;background:transparent;border:0;color:#e4eedc;font:inherit;caret-color:var(--accent);padding:4px 0;}
+  #terminal-input:focus {outline:none;}
+  #terminal-form:focus-within {box-shadow:inset 0 -2px var(--accent);}
+  #terminal-form>button {color:var(--accent);font-size:18px;padding:4px 8px;}
+  .shell-starters {display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:24px;color:var(--muted);font-size:11px;}
+  .shell-starters button {border:1px solid var(--border);background:var(--surface);color:var(--accent);padding:5px 9px;}
+  .shell-starters button:hover,.shell-titlebar button:hover {border-color:var(--accent);}
+  .shell-hint {color:var(--muted);font-size:10px;margin-top:16px;line-height:1.8;}
+  @media(max-width:600px){.shell-page{padding-top:30px}.shell-heading{align-items:start;flex-direction:column;gap:12px}#terminal-log{padding:16px;height:52vh}.shell-titlebar{padding:12px;gap:12px}#terminal-form{padding:12px;gap:8px;flex-wrap:wrap}#terminal-prompt{max-width:100%;flex-basis:100%;font-size:10px}#terminal-input{flex:1;font-size:16px}.shell-hint{font-size:10px}}
+</style>
