@@ -19,7 +19,7 @@ const data = JSON.stringify(posts).replace(/</g, '\\u003c');
       </div>
       <form id="terminal-form" autocomplete="off">
         <label for="terminal-input" id="terminal-prompt">root@saksham:~$</label>
-        <input id="terminal-input" name="command" type="text" aria-label="Terminal command" aria-describedby="terminal-keyboard-hint" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="send" maxlength="2000" />
+        <input id="terminal-input" name="command" type="text" autofocus aria-label="Terminal command" aria-describedby="terminal-keyboard-hint" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="send" maxlength="2000" />
         <button type="submit" aria-label="Run command">↵</button>
       </form>
     </div>
