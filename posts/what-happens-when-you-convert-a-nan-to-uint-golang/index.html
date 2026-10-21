@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.css" integrity="sha384-+rY0QD+LRnTOquDMzGa9lXU6jIwdiQuwCJQ2cdcW0qeP/0UbjQCZlXnRsUMA+9pH" crossorigin="anonymous">
+  
+
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.1/css/academicons.min.css" integrity="sha384-FIue+PI4SsI9XfHCz8dBLg33b0c1fMJgNU3X//L26FYbGnlSEfWmNT7zgWc2N9b6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link href="https://sakshamar.in/deep-thought.css" rel="stylesheet" />
+  
+  
+
+  <title>
+    
+ | What Happens when you convert a NAN to uint in Golang
+
+  </title>
+
+  
+  
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mathtex-script-type.min.js" integrity="sha384-jiBVvJ8NGGj5n7kJaiWwWp9AjC+Yh8rhZY3GtAX8yU28azcLgoRo4oukO87g7zDT" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item is-size-5 has-text-weight-bold" href="https:&#x2F;&#x2F;sakshamar.in"></a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;categories">
+            Categories
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            What Happens when you convert a NAN to uint in Golang
+          </h1>
+          <p class="subtitle">This blog describes the result of converting a NAN to Uint in Golang</p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>sAksham-Ar published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2025-12-28">December 28, 2025</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>2 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>394 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://sakshamar.in/categories/golang/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>golang</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <h1 id="introduction">Introduction</h1>
+<p>Have you ever wondered what happens when you convert a <code>NAN</code> in Golang to an <code>uint64</code>? I always assumed it would be a big garbage value or 0, but after debugging a production bug for 1 day occuring seeming randomly, I found out the result is suprising.</p>
+<h1 id="the-program">The Program</h1>
+<p>Let's take a simple program in golang which, just outputs this value using <code>Printf</code>:</p>
+<pre data-lang="go" style="background-color:#2b303b;color:#c0c5ce;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#b48ead;">package </span><span style="color:#bf616a;">main
+</span><span>
+</span><span style="color:#b48ead;">import </span><span>&quot;</span><span style="color:#a3be8c;">fmt</span><span>&quot;
+</span><span>
+</span><span style="color:#b48ead;">func </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>	</span><span style="color:#bf616a;">a </span><span>:= </span><span style="color:#d08770;">0.0
+</span><span>	</span><span style="color:#bf616a;">b </span><span>:= </span><span style="color:#d08770;">0.0
+</span><span>	</span><span style="color:#bf616a;">fmt</span><span>.</span><span style="color:#bf616a;">Printf</span><span>(&quot;</span><span style="color:#a3be8c;">The result is: </span><span style="color:#d08770;">%d</span><span style="color:#96b5b4;">\n</span><span>&quot;, </span><span style="color:#bf616a;">uint64</span><span>(</span><span style="color:#bf616a;">a</span><span>/</span><span style="color:#bf616a;">b</span><span>))
+</span><span>}
+</span></code></pre>
+<h1 id="output">Output</h1>
+<p>On my laptop:</p>
+<p><img src="/assets/laptop-output.png" alt="output" /></p>
+<p>This output seems to confirm my assumption of a large garbage value. Let's try to run this again in a vm.</p>
+<p>I am using QEMU for creating the VM, following <a href="https://www.redhat.com/en/blog/vm-arm64-fedora">this</a> guide from Redhat.</p>
+<p>And the output is:</p>
+<p><img src="/assets/vm-out.png" alt="vm-output" /></p>
+<p><strong>WAIT, WHAT?</strong></p>
+<h1 id="explanation">Explanation</h1>
+<p>As some people may have guessed, the difference between the two machines is CPU architure. My laptop runs on x86 while the vm runs on ARM64.</p>
+<p>I found <a href="https://stackoverflow.com/questions/70425809/why-is-uint64-of-nan-and-maxfloat64-equal-in-golang">this</a> excellent stack overflow which explains the difference. Essentially, Golang just runs the hardware instruction required for converting <code>NAN</code> to <code>uint</code> and the value is depended on the CPU architecture. On x86, <code>CVTTSD2SI</code> is run which raises an exception which is masked by golang due to which <code>0x8000000000000000</code> (i.e. <code>9223372036854775808</code>) is returned. On Arm64, <code>FCVTZS</code> is run which returns 0 for NAN.</p>
+<h1 id="how-do-other-languages-fare">How do other languages fare?</h1>
+<p>I tried the same with C++ and Rust, to see if they also show the same behaviour,</p>
+<h2 id="c">C++</h2>
+<p>The program:</p>
+<pre data-lang="cpp" style="background-color:#2b303b;color:#c0c5ce;" class="language-cpp "><code class="language-cpp" data-lang="cpp"><span style="color:#b48ead;">#include </span><span>&lt;</span><span style="color:#a3be8c;">cstdint</span><span>&gt;
+</span><span style="color:#b48ead;">#include </span><span>&lt;</span><span style="color:#a3be8c;">cstdio</span><span>&gt;
+</span><span>
+</span><span style="color:#b48ead;">int </span><span style="color:#8fa1b3;">main </span><span>() {
+</span><span>    </span><span style="color:#b48ead;">double</span><span> a, b = </span><span style="color:#d08770;">0</span><span>;
+</span><span>    </span><span style="color:#96b5b4;">printf</span><span>(&quot;</span><span style="color:#a3be8c;">The value is: </span><span style="color:#d08770;">%d</span><span style="color:#96b5b4;">\n</span><span>&quot;, (uint64_t)(a/b));
+</span><span>    </span><span style="color:#b48ead;">return </span><span style="color:#d08770;">0</span><span>;
+</span><span>}
+</span></code></pre>
+<p>Output on my laptop:</p>
+<p><img src="/assets/cpp-laptop-output.png" alt="cpp-laptop-output" /></p>
+<p>Output on VM:</p>
+<p><img src="/assets/cpp-vm-output.png" alt="cpp-vm-output" /></p>
+<h2 id="rust">Rust</h2>
+<p>The program:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> a: </span><span style="color:#b48ead;">f64 </span><span>= </span><span style="color:#d08770;">0.0</span><span>;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> b: </span><span style="color:#b48ead;">f64 </span><span>= </span><span style="color:#d08770;">0.0</span><span>;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> c = (a/b) as </span><span style="color:#b48ead;">u64</span><span>;
+</span><span>    println!(&quot;</span><span style="color:#a3be8c;">The Value is: </span><span style="color:#d08770;">{}</span><span>&quot;, c);
+</span><span>}
+</span></code></pre>
+<p>Output on my laptop:</p>
+<p><img src="/assets/rust-laptop-output.png" alt="rust-laptop-output" /></p>
+<p>Output on VM:</p>
+<p><img src="/assets/rust-vm-output.png" alt="rust-vm-output" /></p>
+<h1 id="final-thoughts">Final Thoughts</h1>
+<p>Only rust shows same output on both platforms, while cpp and golang have different output.
+This is the first time i noticed the output of a golang program changing based on the underlying CPU architecture.</p>
+<p>I find this very suprising given the focus of Simplicity in GO but <code>NAN</code> checks may not be there due to performance reasons. We should always avoid <code>NAN</code> value in our code as this can lead to undefined behaviour.</p>
+<p>If there are any more platform dependent things in golang please feel free to share them in the comments.</p>
+
+          </div>
+        </article>
+      </div>
+      
+      <div class="column is-2 is-hidden-mobile">
+        <aside class="menu" style="position: sticky; top: 48px">
+          <p class="heading has-text-weight-bold">Contents</p>
+          <ul class="menu-list">
+            
+            <li>
+              <a id="link-introduction" class="toc is-size-7 is-active"
+                href="https://sakshamar.in/posts/what-happens-when-you-convert-a-nan-to-uint-golang/#introduction">
+                Introduction
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-the-program" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/what-happens-when-you-convert-a-nan-to-uint-golang/#the-program">
+                The Program
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-output" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/what-happens-when-you-convert-a-nan-to-uint-golang/#output">
+                Output
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-explanation" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/what-happens-when-you-convert-a-nan-to-uint-golang/#explanation">
+                Explanation
+              </a>
+              
+            </li>
+            
+            <li>
+              <a id="link-how-do-other-languages-fare" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/what-happens-when-you-convert-a-nan-to-uint-golang/#how-do-other-languages-fare">
+                How do other languages fare?
+              </a>
+              
+              <ul>
+                
+                <li>
+                  <a id="link-c" class="toc is-size-7" href="https://sakshamar.in/posts/what-happens-when-you-convert-a-nan-to-uint-golang/#c">
+                    C++
+                  </a>
+                </li>
+                
+                <li>
+                  <a id="link-rust" class="toc is-size-7" href="https://sakshamar.in/posts/what-happens-when-you-convert-a-nan-to-uint-golang/#rust">
+                    Rust
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li>
+              <a id="link-final-thoughts" class="toc is-size-7 "
+                href="https://sakshamar.in/posts/what-happens-when-you-convert-a-nan-to-uint-golang/#final-thoughts">
+                Final Thoughts
+              </a>
+              
+            </li>
+            
+          </ul>
+        </aside>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+              
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;sakshamar.in&#x2F;posts&#x2F;rabbitmq&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              Keeping Microservices in Sync using RabbitMQ
+            </a>
+          </div>
+           
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-6">
+        <div id="disqus_thread"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+  <footer class="footer py-4">
+    <div class="content has-text-centered">
+      <p>
+        Built with
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-code"></i>
+          </span>
+          <span>code</span>
+        </span>
+        and
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-heart"></i>
+          </span>
+          <span>love</span>
+        </span>
+      </p>
+      <p>
+        Powered by
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-power-off"></i>
+          </span>
+          <span>zola</span>
+        </span>
+      </p>
+    </div>
+  </footer>
+  
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/galleria.min.js" integrity="sha384-QSfwGT8/EU536DKdtyP2D6SLlh8zBaZ0cVkwfrwhqzIU9VCfJT00CLVP5t+HAiYg" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/galleria@1.6.1/dist/themes/folio/galleria.folio.min.js" integrity="sha384-DwpKI+deZB267+hPKwiOIc5Y2GKsVL0mR6hgz7GgIu7AgAMYqJwcJKY1YBNfhWcY" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@8.13.5/dist/mermaid.min.js" integrity="sha384-0yWn54pSGtfKCU+skfA69l25VsCw+MZt4LQov3xNRoS7YkAMrFokGgSBnAWSK4pv" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1.1.13/dist/chart.xkcd.min.js" integrity="sha384-xC3h1+IHXK8seA+8KfT79Z4e0GPsznjXBoMa5nd8ooWKplPyXx92NOmljWxLC/cs" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://sakshamar.in/elasticlunr.min.js"></script>
+  <script src="https://sakshamar.in/search_index.en.js"></script><script src="https://sakshamar.in/js/site.js"></script>
+
+  
+
+<script type="text/javascript">
+  const menuBarHeight = document.querySelector("nav.navbar").clientHeight;
+  const tocItems = document.querySelectorAll(".toc");
+  const navSections = new Array(tocItems.length);
+
+  tocItems.forEach((el, i) => {
+    let id = el.getAttribute("id").substring(5);
+    navSections[i] = document.getElementById(id);
+  })
+
+  function isVisible(tocIndex) {
+    const current = navSections[tocIndex];
+    const next = tocIndex < tocItems.length - 1 ? navSections[tocIndex + 1]
+      : document.querySelectorAll("section.section").item(1);
+
+    const c = current.getBoundingClientRect();
+    const n = next.getBoundingClientRect();
+    const h = (window.innerHeight || document.documentElement.clientHeight);
+
+    return (c.top <= h) && (n.top - menuBarHeight >= 0);
+  }
+
+  function activateIfVisible() {
+    for (b = true, i = 0; i < tocItems.length; i++) {
+      if (b && isVisible(i)) {
+        tocItems[i].classList.add('is-active');
+        b = false;
+      } else
+        tocItems[i].classList.remove('is-active');
+    }
+  }
+
+  var isTicking = null;
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      window.requestAnimationFrame(() => {
+        activateIfVisible();
+        isTicking = false;
+      });
+      isTicking = true;
+    }
+  }, false);
+</script>
+
+
+
+<script>
+  var disqus_config = function () {
+    this.page.url = "https://sakshamar.in";
+    this.page.identifier = "/posts/what-happens-when-you-convert-a-nan-to-uint-golang/";
+  };
+
+  (function () {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://sakshamar.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+
+
+
+  
+  
+</body>
+
+</html>

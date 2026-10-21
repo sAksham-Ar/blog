@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title> - RabbitMQ</title>
+    <link rel="self" type="application/atom+xml" href="https://sakshamar.in/categories/rabbitmq/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://sakshamar.in"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2022-03-25T00:00:00+00:00</updated>
+    <id>https://sakshamar.in/categories/rabbitmq/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Keeping Microservices in Sync using RabbitMQ</title>
+        <published>2022-03-25T00:00:00+00:00</published>
+        <updated>2022-03-25T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://sakshamar.in/posts/rabbitmq/"/>
+        <id>https://sakshamar.in/posts/rabbitmq/</id>
+        
+        <content type="html" xml:base="https://sakshamar.in/posts/rabbitmq/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
+&lt;p&gt;This Year&#x27;s Opensoft Problem Statement was very interesting from a DevOps perspective. Basically, we had to convert a Monolithic Application to Microservices, Dockerize the microservices and then deploy them on Kubernetes.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;&#x2F;h2&gt;
+&lt;p&gt;We have created 7 microservices and each microservice has its own database, but some data has to be shared between multiple microservices. Keeping a single database for these defeats the point of creating microservices. We ended up using &lt;a href=&quot;https:&#x2F;&#x2F;www.rabbitmq.com&#x2F;&quot;&gt;RabbitMQ&lt;&#x2F;a&gt; for keeping the important data in sync between microservices.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;rabbitmq&quot;&gt;RabbitMQ&lt;&#x2F;h2&gt;
+&lt;p&gt;In RabbitMQ, each microservice has its own queue and all essential microservices can produce data to these queues. We used &lt;code&gt;fanout&lt;&#x2F;code&gt; type of exchange where every producer published to all the queues. Each microservice then consumes the message and acts according to the &lt;code&gt;properties.content_type&lt;&#x2F;code&gt; which we sent during producing.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;producing&quot;&gt;Producing&lt;&#x2F;h2&gt;
+&lt;p&gt;For producing in Django, we just have to write a &lt;code&gt;producer.py&lt;&#x2F;code&gt;,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;python&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-python &quot;&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;pika, json
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;django.conf &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;settings
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;RABBITMQ_URL &lt;&#x2F;span&gt;&lt;span&gt;= settings.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;RABBITMQ_URL
+&lt;&#x2F;span&gt;&lt;span&gt;params = pika.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;URLParameters&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;RABBITMQ_URL&lt;&#x2F;span&gt;&lt;span&gt;+&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;?heartbeat=600&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;+&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;blocked_connection_timeout=300&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;publish&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;):
+&lt;&#x2F;span&gt;&lt;span&gt;    connection = pika.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;BlockingConnection&lt;&#x2F;span&gt;&lt;span&gt;(params)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    exchange_queue = &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;logs&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;    channel = connection.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;channel&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;    channel.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exchange_declare&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exchange&lt;&#x2F;span&gt;&lt;span&gt;=exchange_queue, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exchange_type&lt;&#x2F;span&gt;&lt;span&gt;=&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;fanout&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;)   
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    properties = pika.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;BasicProperties&lt;&#x2F;span&gt;&lt;span&gt;(method)
+&lt;&#x2F;span&gt;&lt;span&gt;    channel.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;basic_publish&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exchange&lt;&#x2F;span&gt;&lt;span&gt;=exchange_queue, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;routing_key&lt;&#x2F;span&gt;&lt;span&gt;=&amp;#39;&amp;#39;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;=json.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;dumps&lt;&#x2F;span&gt;&lt;span&gt;(body), &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;properties&lt;&#x2F;span&gt;&lt;span&gt;=properties)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    connection.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;close&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now wherever we want to publish, we just import the publish function and send the method(which defines the &lt;code&gt;properties.content_type&lt;&#x2F;code&gt;) and the body.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;consuming&quot;&gt;Consuming&lt;&#x2F;h2&gt;
+&lt;p&gt;For consuming, we have to write a &lt;code&gt;consumer.py&lt;&#x2F;code&gt;. An example from the Restaurant Menu microservice which keeps track of items of each restaurant,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;python&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-python &quot;&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;pika, json
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;os
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;django
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;sys &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;path
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;path.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;append&lt;&#x2F;span&gt;&lt;span&gt;(os.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;getcwd&lt;&#x2F;span&gt;&lt;span&gt;()+&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;restaurant_menu&#x2F;settings.py&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;)
+&lt;&#x2F;span&gt;&lt;span&gt;os.environ.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;setdefault&lt;&#x2F;span&gt;&lt;span&gt;(&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;DJANGO_SETTINGS_MODULE&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;, &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;restaurant_menu.settings&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;) 
+&lt;&#x2F;span&gt;&lt;span&gt;django.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;setup&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;restaurant_menu_app.models &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;Restaurant, MenuItem
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;restaurant_menu_app.serializers &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;RestaurantSerializer, MenuItemSerializer
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;django.conf &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;settings
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;django.contrib.auth.hashers &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;make_password
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;restaurant_menu_app.producer &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;publish
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;RABBITMQ_URL &lt;&#x2F;span&gt;&lt;span&gt;= settings.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;RABBITMQ_URL
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;params = pika.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;URLParameters&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;RABBITMQ_URL&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;connection = pika.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;BlockingConnection&lt;&#x2F;span&gt;&lt;span&gt;(params)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;exchange_queue = &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;logs&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;channel = connection.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;channel&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;channel.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exchange_declare&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exchange&lt;&#x2F;span&gt;&lt;span&gt;=exchange_queue, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exchange_type&lt;&#x2F;span&gt;&lt;span&gt;=&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;fanout&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;result = channel.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;queue_declare&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;queue&lt;&#x2F;span&gt;&lt;span&gt;=&amp;#39;&amp;#39;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exclusive&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;True&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;queue_name = result.method.queue
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;exchange_queue = &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;logs&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;channel.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;queue_bind&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exchange&lt;&#x2F;span&gt;&lt;span&gt;=exchange_queue, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;queue&lt;&#x2F;span&gt;&lt;span&gt;=queue_name)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;callback&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ch&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;properties&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;):
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;print&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Received in Restaurant Menu Item Application&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;flush&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;True&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;    data = json.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;loads&lt;&#x2F;span&gt;&lt;span&gt;(body)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;elif &lt;&#x2F;span&gt;&lt;span&gt;properties.content_type == &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;RESTAURANT_CREATED&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;:
+&lt;&#x2F;span&gt;&lt;span&gt;        data[&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;password&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;] = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;make_password&lt;&#x2F;span&gt;&lt;span&gt;(data[&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;password&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;])
+&lt;&#x2F;span&gt;&lt;span&gt;        serializer = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;RestaurantSerializer&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data&lt;&#x2F;span&gt;&lt;span&gt;=data)
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;serializer.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;is_valid&lt;&#x2F;span&gt;&lt;span&gt;():
+&lt;&#x2F;span&gt;&lt;span&gt;            serializer.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;save&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We have to run &lt;code&gt;consumer.py&lt;&#x2F;code&gt; separate from our Django application and this will keep the important data in sync.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;syncing-data-between-clusters&quot;&gt;Syncing Data between Clusters&lt;&#x2F;h2&gt;
+&lt;p&gt;For the Problem Statement we had to deploy 2 clusters. For keeping the data of same microservices in sync in different clusters, what we did was when a new data was being sent to the backend we did not save it, rather we published to RabbitMQ. The RabbitMQ queue does the job of keeping the data in sync with the same microservice from the other cluster. For example in &lt;code&gt;consumer.py&lt;&#x2F;code&gt; of the Restaurant microservice,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;python&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-python &quot;&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span&gt;(properties.content_type==&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;RESTAURANT_SIGNUP&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;):
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# If a restaurnat signups
+&lt;&#x2F;span&gt;&lt;span&gt;        raw_password = data[&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;password&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;]
+&lt;&#x2F;span&gt;&lt;span&gt;        data[&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;password&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;] = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;make_password&lt;&#x2F;span&gt;&lt;span&gt;(raw_password)
+&lt;&#x2F;span&gt;&lt;span&gt;        serializer = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;RestaurantSerializer&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data&lt;&#x2F;span&gt;&lt;span&gt;=data)
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span&gt;(serializer.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;is_valid&lt;&#x2F;span&gt;&lt;span&gt;()):
+&lt;&#x2F;span&gt;&lt;span&gt;            restaurant = serializer.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;save&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;            data_to_be_published = {
+&lt;&#x2F;span&gt;&lt;span&gt;                &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;restaurant_id&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;: restaurant.restaurant_id,
+&lt;&#x2F;span&gt;&lt;span&gt;                &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;email&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;: data[&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;email&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;],
+&lt;&#x2F;span&gt;&lt;span&gt;                &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;password&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;: raw_password,
+&lt;&#x2F;span&gt;&lt;span&gt;                &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;restaurant_name&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: data[&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;restaurant_name&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;]
+&lt;&#x2F;span&gt;&lt;span&gt;            }
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;publish&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;RESTAURANT_CREATED&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;=data_to_be_published)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;problems-we-faced&quot;&gt;Problems we faced&lt;&#x2F;h2&gt;
+&lt;p&gt;RabbitMQ was very hard to debug as if a consumer errors out the data in the microservices becomes inconsistent leading to strange behaviour in the app. We were using RabbitMQ hosted on &lt;a href=&quot;https:&#x2F;&#x2F;www.cloudamqp.com&#x2F;&quot;&gt;CloudAMQP&lt;&#x2F;a&gt; which sometimes force closed the connection to consumers and that lead to features stopping randomly. Working with RabbitMQ was a very frustrating experience for us and &lt;a href=&quot;https:&#x2F;&#x2F;kafka.apache.org&#x2F;&quot;&gt;Apache Kafka&lt;&#x2F;a&gt; or &lt;a href=&quot;https:&#x2F;&#x2F;aws.amazon.com&#x2F;sqs&#x2F;&quot;&gt;Amazon SQS&lt;&#x2F;a&gt; may yield better results.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;This is how we kept our microservices in sync. You can read the entire Problem Statement &lt;a href=&quot;https:&#x2F;&#x2F;drive.google.com&#x2F;file&#x2F;d&#x2F;1Mv5Ro2gi5nl3zGhA4IR3NMpwZdXXmL2M&#x2F;view?fbclid=IwAR3IrikkanZaprOreedwmbIFp5YtudefssTREd5RFByRYoBKcOGG2QpotUw&quot;&gt;here.&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

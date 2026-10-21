@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title> - Docker</title>
+    <link rel="self" type="application/atom+xml" href="https://sakshamar.in/categories/docker/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://sakshamar.in"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2021-09-29T00:00:00+00:00</updated>
+    <id>https://sakshamar.in/categories/docker/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Introduction to Docker</title>
+        <published>2021-09-29T00:00:00+00:00</published>
+        <updated>2021-09-29T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://sakshamar.in/posts/introduction-to-docker/"/>
+        <id>https://sakshamar.in/posts/introduction-to-docker/</id>
+        
+        <content type="html" xml:base="https://sakshamar.in/posts/introduction-to-docker/">&lt;p&gt;I have been playing around with Docker during the last few days ,and I am quite impressed by its abilities. I am writing this blog to share what I have learnt by trying to dockerize a simple Flask app.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-is-docker&quot;&gt;What is Docker?&lt;&#x2F;h2&gt;
+&lt;p&gt;Docker is an open source containerizing platform, It enables developers package their applications into containers.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-is-a-container&quot;&gt;What is a Container?&lt;&#x2F;h2&gt;
+&lt;p&gt;According to &lt;a href=&quot;https:&#x2F;&#x2F;cloud.google.com&#x2F;learn&#x2F;what-are-containers&quot;&gt;Google&lt;&#x2F;a&gt;,&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Containers are lightweight packages of your application code together with dependencies such as specific versions of programming language runtimes and libraries required to run your software services.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h2 id=&quot;what-are-the-advantages-of-docker&quot;&gt;What are the advantages of Docker?&lt;&#x2F;h2&gt;
+&lt;p&gt;The major advantage of using docker is that you do not need to setup your application again and again for different servers, you can just create a docker image once and then deploy it easily on other servers. It also helps when different applications require different versions dependencies as running them in separate containers prevents dependency conflict.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;building-the-application&quot;&gt;Building the Application&lt;&#x2F;h2&gt;
+&lt;p&gt;Let us take a simple Flask app and try to dockerize it.&lt;&#x2F;p&gt;
+&lt;p&gt;Code of the app:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;py&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-py &quot;&gt;&lt;code class=&quot;language-py&quot; data-lang=&quot;py&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;flask &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;Flask
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;mysql.connector
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;mysql.connector &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;errorcode
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;app = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Flask&lt;&#x2F;span&gt;&lt;span&gt;(__name__)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;@app.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;route&lt;&#x2F;span&gt;&lt;span&gt;(&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;connect&lt;&#x2F;span&gt;&lt;span&gt;():
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;try&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        mydb = mysql.connector.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;connect&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;host&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;localhost&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;user&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;docker_user&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;password&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Docker@123&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;database&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;        )
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Connected&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;except &lt;&#x2F;span&gt;&lt;span&gt;mysql.connector.Error &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;as &lt;&#x2F;span&gt;&lt;span&gt;err:
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;err.errno == errorcode.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ER_ACCESS_DENIED_ERROR&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Something is wrong with your user name or password&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;elif &lt;&#x2F;span&gt;&lt;span&gt;err.errno == errorcode.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ER_BAD_DB_ERROR&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Database does not exist&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;else&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;str&lt;&#x2F;span&gt;&lt;span&gt;(err)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;__name__ == &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;__main__&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;:
+&lt;&#x2F;span&gt;&lt;span&gt;    app.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;run&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;debug&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;True&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Requirements of the app:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;mysql-connector-python
+&lt;&#x2F;span&gt;&lt;span&gt;flask
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The app just tries to connect to MySQL as user &lt;code&gt;docker_user&lt;&#x2F;code&gt; to access database &lt;code&gt;docker&lt;&#x2F;code&gt; and returns
+&lt;code&gt;Connected&lt;&#x2F;code&gt; if the connection is successful.&lt;&#x2F;p&gt;
+&lt;p&gt;Now we need to create this user and database in MySQL.
+Start the MySQL client and run the following commands,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sql&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-sql &quot;&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;CREATE DATABASE &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;CREATE USER &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;docker_user&lt;&#x2F;span&gt;&lt;span&gt;@&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;localhost&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39; identified by &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Docker@123&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;GRANT&lt;&#x2F;span&gt;&lt;span&gt; ALL PRIVILEGES ON docker.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TO docker_user;
+&lt;&#x2F;span&gt;&lt;span&gt;FLUSH PRIVILEGES;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This first creates the database &lt;code&gt;docker&lt;&#x2F;code&gt;, then it creates the user &lt;code&gt;docker_user&lt;&#x2F;code&gt; and then grants privileges of the database &lt;code&gt;docker&lt;&#x2F;code&gt; to &lt;code&gt;docker_user&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Now after running the app and visiting it in the browser we see,&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;docker-output-1.png&quot; alt=&quot;app output&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;dockerizing-the-application&quot;&gt;Dockerizing the Application&lt;&#x2F;h2&gt;
+&lt;p&gt;To create an image from the application, we would need to write a Dockerfile. The Dockerfile for this application is,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;Dockerfile&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-Dockerfile &quot;&gt;&lt;code class=&quot;language-Dockerfile&quot; data-lang=&quot;Dockerfile&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# syntax=docker&#x2F;dockerfile:1
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;FROM&lt;&#x2F;span&gt;&lt;span&gt; python:3.9-slim-buster
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;WORKDIR &lt;&#x2F;span&gt;&lt;span&gt;&#x2F;app
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;COPY&lt;&#x2F;span&gt;&lt;span&gt; requirements.txt requirements.txt
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;RUN &lt;&#x2F;span&gt;&lt;span&gt;pip install -r requirements.txt
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;COPY&lt;&#x2F;span&gt;&lt;span&gt; . .
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;ARG &lt;&#x2F;span&gt;&lt;span&gt;FLASK_PORT=5000
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;ENV &lt;&#x2F;span&gt;&lt;span&gt;FLASK_PORT=$FLASK_PORT
+&lt;&#x2F;span&gt;&lt;span&gt;ENTRYPOINT python3 -m flask run --host=0.0.0.0 --port=${FLASK_PORT}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here we are first taking a base image of python3.9 which already has python and pip installed, then we are a creating a working directory so that we can write relative paths. We then copy our &lt;code&gt;requirements.txt&lt;&#x2F;code&gt; to our working directory and install the packages needed. Finally, we copy our code, taking &lt;code&gt;port&lt;&#x2F;code&gt; as an environment variable, and run the app.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Note: it is important to run the flask app on &lt;code&gt;0.0.0.0&lt;&#x2F;code&gt; else we will note be able to forward it.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Now, we can build the image using,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt; build&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --tag&lt;&#x2F;span&gt;&lt;span&gt; flask-docker .
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now using &lt;code&gt;docker images&lt;&#x2F;code&gt; we can see that our image has been built,&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;docker-images.png&quot; alt=&quot;docker images output&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Now for MySQL, there is already an official image on &lt;a href=&quot;https:&#x2F;&#x2F;hub.docker.com&#x2F;_&#x2F;mysql&quot;&gt;docker hub&lt;&#x2F;a&gt; (it is a website from where docker gets images uploaded by other people), we just need to pass our environment variables,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt; run&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --name&lt;&#x2F;span&gt;&lt;span&gt; db&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e&lt;&#x2F;span&gt;&lt;span&gt; MYSQL_ROOT_PASSWORD=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Docker@123&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e&lt;&#x2F;span&gt;&lt;span&gt; MYSQL_DATABASE=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e&lt;&#x2F;span&gt;&lt;span&gt; MYSQL_USER=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;docker_user&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e&lt;&#x2F;span&gt;&lt;span&gt; MYSQL_PASSWORD=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Docker@123&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -d&lt;&#x2F;span&gt;&lt;span&gt; mysql
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here &lt;code&gt;-d&lt;&#x2F;code&gt; is for running in detached mode, by default docker is attached to the terminal so when we close it our application will also close.&lt;&#x2F;p&gt;
+&lt;p&gt;Now, let&#x27;s run our app on port &lt;code&gt;5000&lt;&#x2F;code&gt;,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt; run&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --name&lt;&#x2F;span&gt;&lt;span&gt; app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e&lt;&#x2F;span&gt;&lt;span&gt; FLASK_PORT=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;5000&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -p&lt;&#x2F;span&gt;&lt;span&gt; 5000:5000&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -d&lt;&#x2F;span&gt;&lt;span&gt; flask-docker
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The &lt;code&gt;-p&lt;&#x2F;code&gt; flag maps the port &lt;code&gt;5000&lt;&#x2F;code&gt; of our pc to &lt;code&gt;5000&lt;&#x2F;code&gt; of the Docker conatiner.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;docker-output-without-network.png&quot; alt=&quot;app output without link&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;networks&quot;&gt;Networks&lt;&#x2F;h2&gt;
+&lt;p&gt;As we can see our app cannot reach the database even though the database is running this is because they are running in separate containers. With Docker, we can add them both in the same network.&lt;&#x2F;p&gt;
+&lt;p&gt;First let us create a network,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt; network create my_network
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Then, changing the host in our app.py to name of the MySQL container &lt;code&gt;db&lt;&#x2F;code&gt; and rebuilding the image,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;py&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-py &quot;&gt;&lt;code class=&quot;language-py&quot; data-lang=&quot;py&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;flask &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;Flask
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;mysql.connector
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;mysql.connector &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;errorcode
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;app = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Flask&lt;&#x2F;span&gt;&lt;span&gt;(__name__)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;@app.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;route&lt;&#x2F;span&gt;&lt;span&gt;(&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;connect&lt;&#x2F;span&gt;&lt;span&gt;():
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;try&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        mydb = mysql.connector.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;connect&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;host&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;db&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;user&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;docker_user&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;password&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Docker@123&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;database&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;        )
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Connected&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;except &lt;&#x2F;span&gt;&lt;span&gt;mysql.connector.Error &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;as &lt;&#x2F;span&gt;&lt;span&gt;err:
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;err.errno == errorcode.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ER_ACCESS_DENIED_ERROR&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Something is wrong with your user name or password&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;elif &lt;&#x2F;span&gt;&lt;span&gt;err.errno == errorcode.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ER_BAD_DB_ERROR&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Database does not exist&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;else&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;str&lt;&#x2F;span&gt;&lt;span&gt;(err)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;__name__ == &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;__main__&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;:
+&lt;&#x2F;span&gt;&lt;span&gt;    app.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;run&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;debug&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;True&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Finally, we rerun our db and app with this network,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt; run&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --name&lt;&#x2F;span&gt;&lt;span&gt; db&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e&lt;&#x2F;span&gt;&lt;span&gt; MYSQL_ROOT_PASSWORD=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Docker@123&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e&lt;&#x2F;span&gt;&lt;span&gt; MYSQL_DATABASE=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e&lt;&#x2F;span&gt;&lt;span&gt; MYSQL_USER=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;docker_user&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e&lt;&#x2F;span&gt;&lt;span&gt; MYSQL_PASSWORD=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Docker@123&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -d  --network&lt;&#x2F;span&gt;&lt;span&gt; my_network mysql
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt; run&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --name&lt;&#x2F;span&gt;&lt;span&gt; app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -e&lt;&#x2F;span&gt;&lt;span&gt; FLASK_PORT=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;5000&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -p&lt;&#x2F;span&gt;&lt;span&gt; 5000:5000&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -d --network&lt;&#x2F;span&gt;&lt;span&gt; my_network flask-docker
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now going to &lt;code&gt;http:&#x2F;&#x2F;localhost:5000&#x2F;&lt;&#x2F;code&gt;,&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;docker-final-output.png&quot; alt=&quot;final output&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;docker-compose&quot;&gt;Docker-compose&lt;&#x2F;h2&gt;
+&lt;p&gt;As you can probably see that the commands we have to run have become very long, and we need to rerun then every time we change our image or our configuration. The solution to this is &lt;code&gt;docker-compose&lt;&#x2F;code&gt;, we just need to create a &lt;code&gt;docker-compose.yml&lt;&#x2F;code&gt; file.
+For our current setup:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;yml&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-yml &quot;&gt;&lt;code class=&quot;language-yml&quot; data-lang=&quot;yml&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;version&lt;&#x2F;span&gt;&lt;span&gt;: &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;3.9&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;services&lt;&#x2F;span&gt;&lt;span&gt;: 
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span&gt;: 
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;flask-docker
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;5000:5000&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;environment&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;FLASK_PORT=5000
+&lt;&#x2F;span&gt;&lt;span&gt;  
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;db&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mysql
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;3306:3306&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;environment&lt;&#x2F;span&gt;&lt;span&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;MYSQL_ROOT_PASSWORD=Docker@123
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;MYSQL_DATABASE=docker
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;MYSQL_USER=docker_user
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;MYSQL_PASSWORD=Docker@123
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;strong&gt;Note: Different versions of docker-compose has different syntax see &lt;a href=&quot;https:&#x2F;&#x2F;docs.docker.com&#x2F;compose&#x2F;compose-file&#x2F;compose-versioning&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Now to run our setup we just need to run,&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;docker-compose&lt;&#x2F;span&gt;&lt;span&gt; up&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -d
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;code&gt;docker-compose&lt;&#x2F;code&gt; already creates a default network, so we do not need to create another.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;Now we have reduced our setup to a single command after installing &lt;code&gt;docker&lt;&#x2F;code&gt; and &lt;code&gt;docker-compose&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;By default, data stored in Docker is written in the writable container layer which no longer exists after the container is destroyed, and it is also difficult to move. For persistent data you should use &lt;a href=&quot;https:&#x2F;&#x2F;docs.docker.com&#x2F;storage&#x2F;volumes&#x2F;&quot;&gt;volumes&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;You are encouraged to learn more about docker at the &lt;a href=&quot;https:&#x2F;&#x2F;docs.docker.com&quot;&gt;official docs&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>
